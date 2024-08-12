@@ -247,7 +247,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  backgroundBottomFloor: {fileID: 0}
   player: {fileID: 0}
   playerSortingGroup: {fileID: 0}
   vfxSortingGroup: {fileID: 0}

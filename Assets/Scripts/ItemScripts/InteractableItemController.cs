@@ -76,15 +76,15 @@ namespace ItemScripts
             yield return new WaitUntil(() => clickedYes || clickedNo || UserInput.Escape);
             if (clickedYes)
             {
-                yield return new WaitUntil(() => !clickedYes);
+                // yield return new WaitUntil(() => !clickedYes);
                 yield return null;
-                ExitScene(nameOfScene);
+                StartOnClickYes();
             }
             else if (clickedNo)
             {
-                yield return new WaitUntil(() => !clickedNo);
+                // yield return new WaitUntil(() => !clickedNo);
                 yield return null;
-                ExitScene(nameOfScene);
+                StartOnClickNo();
             }
             else
             {
@@ -127,6 +127,7 @@ namespace ItemScripts
                 yield return null;
                 clickedYes = false;
             }
+            ExitScene(SceneManager.GetActiveScene().name);
         }
 
         public void StartOnClickNo()
@@ -139,6 +140,7 @@ namespace ItemScripts
             clickedNo = true;
             yield return null; // "yield return null" waits for 1 frame before continuing down.
             clickedNo = false;
+            ExitScene(SceneManager.GetActiveScene().name);
         }
 
         private void DirectorPlaying(PlayableDirector obj)

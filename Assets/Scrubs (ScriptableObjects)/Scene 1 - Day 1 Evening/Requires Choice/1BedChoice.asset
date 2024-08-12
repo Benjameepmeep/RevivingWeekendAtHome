@@ -18,4 +18,4 @@ MonoBehaviour:
   itemSize: {x: 0, y: 0}
   itemAudio: {fileID: 8300000, guid: e88f4391cf5fac8489697998787fb22e, type: 3}
   cutSceneAudio: {fileID: 8300000, guid: 79a8021b064bf1549bb0a0f6138c88a4, type: 3}
-  timeline: {fileID: 11400000, guid: 3972c38ad72bcef4696cc10a21a3c514, type: 2}
+  timeline: {fileID: 11400000, guid: 981cd58a7daac7f488c52ab141fcd471, type: 2}
