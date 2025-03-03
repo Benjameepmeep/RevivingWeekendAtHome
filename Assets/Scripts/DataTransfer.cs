@@ -4,9 +4,9 @@ using UnityEngine;
 public class DataTransfer : MonoBehaviour
 {
     // Static instance stored
-    private static DataTransfer _instance;
+    public static DataTransfer Instance;
     
-    public static bool lampOn;
+    public bool lampOn;
     public static bool tvOn = true;
     public static bool radioOn = true;
     public static bool glassDoorOpen;
@@ -26,13 +26,13 @@ public class DataTransfer : MonoBehaviour
     
     private void Awake()
     {
-        if (_instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);  // Ensures only one instance is available
         }
         else
         {
-            _instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -55,7 +55,7 @@ public class DataTransfer : MonoBehaviour
             catSortingOrderInside = 50;
         }
     }
-    public static void TurnLampOnOrOff()
+    public void TurnLampOnOrOff()
     {
         if (lampOn)
         {

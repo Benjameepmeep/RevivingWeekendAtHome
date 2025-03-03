@@ -1703,6 +1703,7 @@ GameObject:
   - component: {fileID: 984649240451864993}
   - component: {fileID: 8865687985206581296}
   - component: {fileID: 6571619975927201690}
+  - component: {fileID: 8676793505018436782}
   m_Layer: 5
   m_Name: Canvas - PauseMenuScreen
   m_TagString: PauseScene
@@ -1797,6 +1798,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &8676793505018436782
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5810920461909348882}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6039016423229851603
 GameObject:
   m_ObjectHideFlags: 0

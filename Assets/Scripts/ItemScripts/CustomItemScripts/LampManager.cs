@@ -18,7 +18,7 @@ namespace ItemScripts.CustomItemScripts
         {
             lampLight = GetComponent<Light2D>();
 
-            if (DataTransfer.lampOn)
+            if (DataTransfer.Instance.lampOn)
             {
                 lampLight.enabled = true;
             }
@@ -32,22 +32,22 @@ namespace ItemScripts.CustomItemScripts
         private IEnumerator NewScene()
         {
             yield return null;
-            lampLight.enabled = DataTransfer.lampOn;
+            lampLight.enabled = DataTransfer.Instance.lampOn;
         }
 
         private IEnumerator PlayerNearLamp()
         {
             yield return new WaitUntil(() => !ItemObjectScript.inItemScene && UserInput.Interact || !_triggerActive);
             if (!_triggerActive) yield break;
-            DataTransfer.TurnLampOnOrOff();
+            DataTransfer.Instance.TurnLampOnOrOff();
             yield return null;
-            if (DataTransfer.lampOn)
+            if (DataTransfer.Instance.lampOn)
             {
                 audioSource.PlayOneShot(lampOnSfx);
                 // lampLight.intensity = 1;
                 lampLight.enabled = true; 
             }
-            else if (!DataTransfer.lampOn)
+            else if (!DataTransfer.Instance.lampOn)
             {
                 audioSource.PlayOneShot(lampOffSfx);
                 // lampLight.intensity = 0;
