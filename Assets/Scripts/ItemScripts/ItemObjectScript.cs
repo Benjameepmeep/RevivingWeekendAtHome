@@ -1,15 +1,10 @@
 using System.Collections;
-using Cat;
-using PlayerScripts;
-using SceneScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-namespace ItemScripts
-{
-    public class ItemObjectScript : MonoBehaviour
+public class ItemObjectScript : MonoBehaviour
     {
         #region --- Initialization ---
         
@@ -35,18 +30,14 @@ namespace ItemScripts
         public static GameObject currentTriggeredObject;
         private bool _playerIsInTrigger;
 
-        private Scene _itemScene;
-        private Scene _interactableScene;
+        // private Scene _itemScene;
+        // private Scene _interactableScene;
 
         private GameObject _cat;
         private CatInteractionScript _catInteractionScript;
 
-        private EventSystem _eventSystemMain;
-        public static bool enableEventSystemMain;
-
         private void Start()
         {
-            _eventSystemMain = GameObject.FindWithTag("EventSystemMain").GetComponent<EventSystem>();
             if (gameObject != GameObject.FindWithTag("CatPNG")) return;
             _cat = GameObject.FindWithTag("CatPNG");
             _catInteractionScript = _cat.GetComponent<CatInteractionScript>();
@@ -58,16 +49,16 @@ namespace ItemScripts
         {
             if (Keyboard.current.cKey.isPressed)
             {
-                print("Loaded scenes currently: " + SceneManager.loadedSceneCount);
+                Debug.Log("Loaded scenes currently: " + SceneManager.loadedSceneCount);
                 if (currentTriggeredObject == null)
                 {
-                     print("CurrentTriggeredObject is null.");
+                        Debug.Log("CurrentTriggeredObject is null.");
                 }
                 else
                 {
-                    print("CurrentTriggeredObject: " + currentTriggeredObject.name);
+                    Debug.Log("CurrentTriggeredObject: " + currentTriggeredObject.name);
                 }
-                print("Are we in an ItemScene? " + inItemScene);
+                Debug.Log("Are we in an ItemScene? " + inItemScene);
             }
 
             if (SceneManager.loadedSceneCount > 2)
@@ -78,15 +69,6 @@ namespace ItemScripts
             if (InteractableItemController.clickedYes && !_choiceHasBeenMade)
             {
                 _choiceHasBeenMade = true;
-            }
-
-            if (enableEventSystemMain)
-            {
-                _eventSystemMain.enabled = true;
-            }
-            else
-            {
-                _eventSystemMain.enabled = false;
             }
         }
         // <3 --- The below comment is to serve as inspiration for how NOT to code. --- <3
@@ -102,7 +84,7 @@ namespace ItemScripts
             ItemController.playerIsInsideItemTrigger = _playerIsInTrigger;
 
             currentTriggeredObject = gameObject;
-            print("CurrentTriggeredObject assigned to: " + currentTriggeredObject.name);
+            Debug.Log("CurrentTriggeredObject assigned to: " + currentTriggeredObject.name);
             
             if (autoInteract)
             {
@@ -129,7 +111,7 @@ namespace ItemScripts
             if (!_playerIsInTrigger) yield break;
             if (inItemScene)
             {
-                print("Player tried to Interact, but was currently in an ItemScene.");
+                Debug.Log("Player tried to Interact, but was currently in an ItemScene.");
                 yield break;
             }
             OpenYourItemScene();
@@ -170,7 +152,7 @@ namespace ItemScripts
                 currentObjectInt = thisObjectInt;
                 currentUsedInteractableInt = usedInteractableInt;
                 
-                print("Opening Item Scene of: " + gameObject);
+                Debug.Log("Opening Item Scene of: " + gameObject);
                 if (interactableWithChoice)
                 {
                     if (_choiceHasBeenMade)
@@ -180,7 +162,8 @@ namespace ItemScripts
                     else
                     {
                         StartCoroutine(LoadAdditiveScene("Interactable")); 
-                        enableEventSystemMain = false;
+                        EventSystemMain.Instance.DisableEventSystem();
+
                     }
                 }
                 else
@@ -219,8 +202,8 @@ namespace ItemScripts
                 currentAmountOfLoadedScenes--;
             }
             if (currentAmountOfLoadedScenes < 2) 
-                print("No longer removing scenes because " + currentAmountOfLoadedScenes + " = 1.");
+                Debug.Log("No longer removing scenes because " + currentAmountOfLoadedScenes + " = 1.");
             yield break;
         }
     }
-}
+

@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
-namespace Cat
-{
+
     public class CatScript : MonoBehaviour
     {
         public AIPath aiPath;
         public Animator anim;
+        private GameObject cat;
+
         public GameObject goal;
         public AudioSource meowAudioSource;
         public AudioClip[] meows;
@@ -22,8 +23,7 @@ namespace Cat
         private Vector2 _directionValue;
         private Vector2 _lastPosition;
 
-        [SerializeField] private GameObject cat;
-        [SerializeField] private SortingGroup catSortingGroup;
+        private SortingGroup catSortingGroup;
 
         public bool onTheMove = true;
 
@@ -34,7 +34,12 @@ namespace Cat
 
         private void Start()
         {
-            cat = GameObject.FindWithTag("Cat");
+            cat = transform.parent.gameObject;
+
+            FloorManager.Instance.catTriggerBox = GetComponent<BoxCollider2D>();
+            FloorManager.Instance.catSprite = cat.GetComponent<SpriteRenderer>();
+            FloorManager.Instance.cat = cat;
+
             catSortingGroup = cat.GetComponent<SortingGroup>();
 
             if (DataTransfer.catOutside)
@@ -157,4 +162,3 @@ namespace Cat
             destinationReached = false;
         }
     }
-}

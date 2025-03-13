@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.Timeline;
 
-namespace ItemScripts
-{
+
     [CreateAssetMenu]
     public class ItemType : ScriptableObject
     {
@@ -14,4 +13,4 @@ namespace ItemScripts
         public AudioClip cutSceneAudio;
         public TimelineAsset timeline;
     }
-}
+

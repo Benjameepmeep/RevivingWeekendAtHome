@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Triggers
-{
+
     public class CatFlapOutdoorTrigger : MonoBehaviour
     {
         [SerializeField] private GameObject cat;
@@ -41,4 +40,4 @@ namespace Triggers
                 return;
         }
     }
-}
+

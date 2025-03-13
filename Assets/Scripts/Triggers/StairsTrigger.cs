@@ -1,8 +1,6 @@
 using UnityEngine;
 
-namespace Triggers
-{
-    // Make sure this script runs after FloorManager.cs in Project Settings, in Script Execution Order.
+// Make sure this script runs after FloorManager.cs in Project Settings, in Script Execution Order.
     public class StairsTrigger : MonoBehaviour
     {
         // Declare variables
@@ -26,7 +24,7 @@ namespace Triggers
 
         public void PlayerOnTopFloor()
         {
-            print("Player on Top Floor");
+            Debug.Log("Player on Top Floor");
             foreach(GameObject bottomFloorGameObject in bottomFloorArray)
                 if (!bottomFloorGameObject.Equals(gameObject))
                     bottomFloorGameObject.SetActive(false);
@@ -52,7 +50,7 @@ namespace Triggers
             }
             else if (!bottomFloorTrigger)
             {
-                print("Going from Top Floor to Bottom Floor");
+                Debug.Log("Going from Top Floor to Bottom Floor");
                 foreach(GameObject topFloorGameObject in topFloorArray)
                     if (!topFloorGameObject.Equals(gameObject))
                         topFloorGameObject.SetActive(false);
@@ -68,4 +66,4 @@ namespace Triggers
             DataTransfer.SwitchFloors();
         }
     }
-}
+

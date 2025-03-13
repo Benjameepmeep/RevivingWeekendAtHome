@@ -1,9 +1,6 @@
 using Cinemachine;
-using PlayerScripts;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class WindowsInteraction : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera mainCamera;
@@ -58,4 +55,4 @@ namespace ItemScripts.CustomItemScripts
             ReturnCamera();
         }
     }
-}
+

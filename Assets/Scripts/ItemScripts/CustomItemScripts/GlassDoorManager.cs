@@ -1,9 +1,6 @@
 using System.Collections;
-using PlayerScripts;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class GlassDoorManager : MonoBehaviour
     {
         private Animator _animator;
@@ -78,4 +75,4 @@ namespace ItemScripts.CustomItemScripts
             _triggerActive = false; 
         }
     }
-}
+

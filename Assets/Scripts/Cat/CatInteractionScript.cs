@@ -1,11 +1,9 @@
 using System.Collections;
-using ItemScripts;
 using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Cat
-{
+
     public class CatInteractionScript : MonoBehaviour
     {
         private GameObject _catPNG;
@@ -53,4 +51,4 @@ namespace Cat
             return number <= threshold;
         }
     }
-}
+

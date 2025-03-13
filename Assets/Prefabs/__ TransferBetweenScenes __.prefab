@@ -1541,6 +1541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933e9f4e242e3154fa17081826b0345c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lampOn: 0
 --- !u!114 &1105035188594258490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1555,7 +1556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomFloor: {fileID: 0}
   stairsBottomFloor: {fileID: 0}
-  toesTriggerBox: {fileID: 0}
+  catTriggerBox: {fileID: 0}
   topFloor: {fileID: 0}
   stairsTopFloor: {fileID: 0}
   bathroomTrigger: {fileID: 0}
@@ -1574,7 +1575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5fa329c2e87024428df414cdc5aa6ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseScene: {fileID: 5810920461909348882}
+  pauseCanvas: {fileID: 0}
   userInput: {fileID: 0}
   pausedDuringCutscene: 0
 --- !u!1 &5039888048183959387
@@ -1588,6 +1589,7 @@ GameObject:
   - component: {fileID: 6671225972392770089}
   - component: {fileID: 6039859667898449528}
   - component: {fileID: 8467069116677487595}
+  - component: {fileID: 2414481862008798677}
   m_Layer: 0
   m_Name: '>> EventSystemMain <<'
   m_TagString: EventSystemMain
@@ -1604,7 +1606,7 @@ Transform:
   m_GameObject: {fileID: 5039888048183959387}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.405884, y: -3.7276, z: -0.18925533}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1655,6 +1657,18 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+--- !u!114 &2414481862008798677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039888048183959387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76884325fa76e4d4babbaf872725ec1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5244940527882226554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,8 +1766,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

@@ -2,8 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-namespace Music_Scripts
-{
+
     public class AudioController : MonoBehaviour
     {
         public AudioMixer audioMixer;
@@ -21,4 +20,4 @@ namespace Music_Scripts
             audioMixer.SetFloat("DialogueVolume", volume.value);
         }
     }
-}
+

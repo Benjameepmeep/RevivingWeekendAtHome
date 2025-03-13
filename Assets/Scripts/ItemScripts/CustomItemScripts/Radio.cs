@@ -1,15 +1,13 @@
-using PlayerScripts;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
+
     public class Radio : MonoBehaviour
     {
-        private BackgroundMusic _backgroundMusic;
-        // Start is called before the first frame update
+        [SerializeField] private BackgroundMusic _backgroundMusic;
+
         void Start()
         {
-            _backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<BackgroundMusic>();
+            if (!_backgroundMusic) _backgroundMusic = GameObject.FindGameObjectWithTag("BackgroundMusic").GetComponent<BackgroundMusic>();
         }
     
         private void OnTriggerStay2D(Collider2D other)
@@ -21,4 +19,4 @@ namespace ItemScripts.CustomItemScripts
             }
         }
     }
-}
+

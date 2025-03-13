@@ -1,10 +1,7 @@
 using System.Collections;
-using PlayerScripts;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class LampManager : MonoBehaviour
     {
         [SerializeField] private Light2D lampLight;
@@ -69,4 +66,4 @@ namespace ItemScripts.CustomItemScripts
             _triggerActive = false;
         }
     }
-}
+

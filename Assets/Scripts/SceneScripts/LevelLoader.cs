@@ -1,12 +1,8 @@
 using System.Collections;
-using PlayerScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
-namespace SceneScripts
-{
-    public class LevelLoader : MonoBehaviour
+public class LevelLoader : MonoBehaviour
     {
         public static Scene currentGameScene;
         
@@ -16,6 +12,8 @@ namespace SceneScripts
         public Animator transition;
         public bool noFadeOut;
         public float transitionTime = 2f;
+        [SerializeField] private Scene[] scenesToLoad;
+        private int currentSceneArrayIndex = 0;
         
         [Header("Transition Speed plays at default speed at 1")]
         [SerializeField] private float transitionSpeed = 0.5f;
@@ -24,15 +22,28 @@ namespace SceneScripts
         private void Awake() => _controls = new PlayerControls();
         private void OnEnable() => _controls.Enable();
         private void OnDisable() => _controls.Disable();
+
+        private void CheckForPlayer(){
+
+            if (userInput == null)
+            {
+                userInput = GameObject.FindGameObjectWithTag("Player").GetComponent<UserInput>();
+            }
+
+        }
         
         public void Start()
         {
+            CheckForPlayer();
+
+            currentSceneArrayIndex = 0;
+
             transition.speed = transitionSpeed;
             //Play a no-fade animation if there is no fade out requested
             transition.Play(noFadeOut ? "Crossfade_Idle" : "Crossfade_End");
 
             currentGameScene = SceneManager.GetActiveScene();
-            print("This is the " + currentGameScene.name + " with the index: " + currentGameScene.buildIndex);
+            Debug.Log("This is the " + currentGameScene.name + " with the index: " + currentGameScene.buildIndex);
             if (currentGameScene.buildIndex == 0 || !_controls.TitleScreen.enabled)
             {
                 userInput.SwitchInputToTitleScreen();
@@ -45,6 +56,8 @@ namespace SceneScripts
 
         private void Update()
         {
+            CheckForPlayer();
+
             if (userInput.titleScreenControlsActive)
             {
                 if (UserInput.QuitGame)
@@ -61,6 +74,8 @@ namespace SceneScripts
 
         private void BeforeQuittingTheGame()
         {
+            CheckForPlayer();
+
             if (UserInput.QuitGame)
             {
                 QuitTheGame();
@@ -94,6 +109,22 @@ namespace SceneScripts
             StartCoroutine(LoadLevel(SceneManager.GetSceneByName(sceneName).buildIndex));
         }
 
+        public void LoadSceneByNextInArray(){
+
+            if (currentSceneArrayIndex < scenesToLoad.Length)
+            {
+                StartCoroutine(LoadLevel(scenesToLoad[currentSceneArrayIndex].buildIndex));
+                currentSceneArrayIndex++;
+            }
+            else
+            {
+                Debug.Log("No more scenes to load.");
+            }
+
+
+        }
+        
+
         public void LoadTitleScreen()
         {
             SceneManager.LoadScene("Scenes/Scene 0 - Title Screen");
@@ -109,5 +140,4 @@ namespace SceneScripts
             yield return new WaitForSeconds(transitionTime + 0.1f);
             SceneManager.LoadScene(levelIndex);
         }
-    }
 }

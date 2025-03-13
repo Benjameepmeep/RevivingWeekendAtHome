@@ -1,6 +1,4 @@
-using Triggers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class ChangeBools : MonoBehaviour
 {

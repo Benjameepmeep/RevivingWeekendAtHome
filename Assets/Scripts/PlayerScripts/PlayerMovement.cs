@@ -1,9 +1,5 @@
-using System;
-using ItemScripts;
 using UnityEngine;
 
-namespace PlayerScripts
-{
     public class PlayerMovement : MonoBehaviour
     {
         private UserInput _userInput;
@@ -69,7 +65,6 @@ namespace PlayerScripts
         {
             if (!other.CompareTag("BottomFloor") && !other.CompareTag("CatPNG") &&
                 !other.CompareTag("TopFloor")) return;
-            print("Currently inside Trigger of: " + other.gameObject.name);
+            Debug.Log("Currently inside Trigger of: " + other.gameObject.name);
         }
     }
-}

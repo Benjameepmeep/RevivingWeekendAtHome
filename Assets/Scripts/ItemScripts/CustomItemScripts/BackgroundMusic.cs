@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
+
     public class BackgroundMusic : MonoBehaviour
     {
-        private GameObject _backgroundMusic;
         [SerializeField] private AudioSource turnOnSfxSource;
         [SerializeField] private AudioSource turnOffSfxSource;
         [SerializeField] private AudioSource musicSource;
@@ -30,19 +28,19 @@ namespace ItemScripts.CustomItemScripts
         {
             if (DataTransfer.onTopFloor)
             {
-                print("On top floor, music reduced to 0.4f.");
+                //Debug.Log("On top floor, music reduced to 0.4f.");
                 musicSource.volume = 0.4f;
             }
             else if (!DataTransfer.onTopFloor)
             {
                 if (DataTransfer.playerInside)
                 {
-                    print("Inside bottom floor, music at 1.0f.");
+                    //Debug.Log("Inside bottom floor, music at 1.0f.");
                     musicSource.volume = 1f;
                 }
                 else if (!DataTransfer.playerInside)
                 {
-                    print("Outside, music at 0.6f.");
+                    //Debug.Log("Outside, music at 0.6f.");
                     musicSource.volume = 0.6f;
                 }
             }
@@ -80,4 +78,4 @@ namespace ItemScripts.CustomItemScripts
             musicSource.mute = true;
         }
     }
-}
+

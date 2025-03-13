@@ -1,7 +1,6 @@
 using UnityEngine;
 
-namespace Triggers
-{
+
     public class BathroomTrigger : MonoBehaviour
     {
         // Declare Variables
@@ -10,6 +9,7 @@ namespace Triggers
     
         void Start()
         {
+            FloorManager.Instance.bathroomTrigger = gameObject;
             insideBathroomToDespawn = GameObject.FindWithTag("Inside Bathroom to Despawn");
         }
 
@@ -41,4 +41,4 @@ namespace Triggers
             DataTransfer.EnterOrExitBathroom();
         }
     }
-}
+

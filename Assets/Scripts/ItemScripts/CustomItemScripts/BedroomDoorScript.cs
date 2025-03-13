@@ -1,8 +1,5 @@
-using PlayerScripts;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class BedroomDoorScript : MonoBehaviour
     {
         [SerializeField] private float slideTimer;
@@ -64,4 +61,3 @@ namespace ItemScripts.CustomItemScripts
         private void OnTriggerEnter2D(Collider2D other) { _triggerActive = true; }
         private void OnTriggerExit2D(Collider2D other) { _triggerActive = false; }
     }
-}

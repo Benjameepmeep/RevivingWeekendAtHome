@@ -2,8 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace Triggers
-{
+
     // TODO: Make sure the VFX Weather shows better onto the snow
     public class OutdoorTrigger : MonoBehaviour
     {
@@ -120,4 +119,3 @@ namespace Triggers
             }
         }
     }
-}

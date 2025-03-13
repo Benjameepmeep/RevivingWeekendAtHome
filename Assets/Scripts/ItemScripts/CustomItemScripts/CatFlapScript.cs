@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
-using PlayerScripts;
 using UnityEngine;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class CatFlapScript : MonoBehaviour
     {
         [SerializeField] private GameObject catFlapDoorObject;
@@ -24,12 +20,12 @@ namespace ItemScripts.CustomItemScripts
         {
             if (DataTransfer.catFlapClosed)
             {
-                print("catFlapClosed");
+                //Debug.Log("catFlapClosed");
                 catFlapDoorObject.SetActive(true);
             }
             else if (!DataTransfer.catFlapClosed)
             {
-                print("catFlapOpen");
+                //Debug.Log("catFlapOpen");
                 catFlapDoorObject.SetActive(false);
             }
         }
@@ -44,13 +40,13 @@ namespace ItemScripts.CustomItemScripts
                 {
                     catFlapAudioSource.PlayOneShot(catFlapLock);
                     catFlapDoorObject.SetActive(true);
-                    Debug.Log("Catflap is now locked");
+                    //Debug.Log("Catflap is now locked");
                 }
                 else if (!DataTransfer.catFlapClosed)
                 {
                     catFlapAudioSource.PlayOneShot(catFlapUnlock);
                     catFlapDoorObject.SetActive(false);
-                    Debug.Log("Catflap is now unlocked");
+                    //Debug.Log("Catflap is now unlocked");
                 }
                 StartCoroutine(UpdateCatPath());
             }
@@ -62,4 +58,4 @@ namespace ItemScripts.CustomItemScripts
             AstarPath.active.UpdateGraphs(_catFlapDoorTrigger.bounds);
         }
     }
-}
+

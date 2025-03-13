@@ -1,10 +1,10 @@
-using PlayerScripts;
 using UnityEngine;
+using System;
 
 public class DataTransfer : MonoBehaviour
 {
-    // Static instance stored
-    public static DataTransfer Instance;
+    public static readonly Lazy<DataTransfer> _instance = new Lazy<DataTransfer>(() => FindFirstObjectByType<DataTransfer>()); 
+    public static DataTransfer Instance => _instance.Value;    
     
     public bool lampOn;
     public static bool tvOn = true;
@@ -24,18 +24,6 @@ public class DataTransfer : MonoBehaviour
     public const int CatSortingOrderOutside = -1;
     public static int vfxSortingOrder = 5;
     
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);  // Ensures only one instance is available
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
     
     private void Update()
     {

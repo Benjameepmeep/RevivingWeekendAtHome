@@ -1,12 +1,10 @@
 using System.Collections;
-using PlayerScripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace ItemScripts
-{
+
     public class UsedInteractableController : MonoBehaviour
     {
         public ItemType[] itemScrub;
@@ -38,7 +36,7 @@ namespace ItemScripts
         
         private IEnumerator PlayerInsideItemScene(string nameOfScene)
         {
-            print("Inside the " + nameOfScene + " Scene, with the item: " + itemScrub[ItemObjectScript.currentUsedInteractableInt]);
+            Debug.Log("Inside the " + nameOfScene + " Scene, with the item: " + itemScrub[ItemObjectScript.currentUsedInteractableInt]);
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(nameOfScene))
             {
                 Debug.LogError(nameOfScene + " isn't the active Scene!");
@@ -47,9 +45,9 @@ namespace ItemScripts
             
             yield return null; // This line is vital to stop for 1 frame. It avoids reopening a scene immediately if UserInput.Interact.
             
-            print("Currently exiting " + nameOfScene + ".");
+            Debug.Log("Currently exiting " + nameOfScene + ".");
             ItemObjectScript.inItemScene = false;
             SceneManager.UnloadSceneAsync(nameOfScene);
         }
     }
-}
+

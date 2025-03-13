@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace PlayerScripts
-{
     public class UserInput : MonoBehaviour
     {
         private PlayerControls _controls;
@@ -119,4 +117,3 @@ namespace PlayerScripts
             PauseDuringCutscene = _controls.Cutscene.OpenPauseMenu.triggered;
         }
     }
-}

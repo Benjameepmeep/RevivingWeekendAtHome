@@ -1,11 +1,8 @@
 using System.Collections;
-using PlayerScripts;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 
-namespace ItemScripts.CustomItemScripts
-{
     public class TVManager : MonoBehaviour
     {
         private Light2D _tvLight;
@@ -90,4 +87,4 @@ namespace ItemScripts.CustomItemScripts
             yield return ChangeLightContinuously();
         }
     }
-}
+
