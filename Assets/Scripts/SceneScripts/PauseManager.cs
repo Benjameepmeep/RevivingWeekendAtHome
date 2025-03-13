@@ -11,19 +11,25 @@ public class PauseManager : MonoBehaviour
 
     private void Start()
     {
-        CheckForPlayer();
 
         pauseCanvas = FloorManager.Instance.pauseScreen;;
+
+        CheckForPlayer();
+
 
         if (pauseCanvas.activeSelf)
         {
             DataTransfer.isPause = false;
             SetPauseScreenInactive();
         }
+
+        
     }
 
     private void Update()
     {
+        if (userInput == null) return;
+
         if (UserInput.Escape)
         {
             StartCoroutine(AreWePausing(false));

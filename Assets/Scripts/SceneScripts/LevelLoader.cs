@@ -43,7 +43,7 @@ public class LevelLoader : MonoBehaviour
             transition.Play(noFadeOut ? "Crossfade_Idle" : "Crossfade_End");
 
             currentGameScene = SceneManager.GetActiveScene();
-            Debug.Log("This is the " + currentGameScene.name + " with the index: " + currentGameScene.buildIndex);
+            //Debug.Log("This is the " + currentGameScene.name + " with the index: " + currentGameScene.buildIndex);
             if (currentGameScene.buildIndex == 0 || !_controls.TitleScreen.enabled)
             {
                 userInput.SwitchInputToTitleScreen();
@@ -106,7 +106,9 @@ public class LevelLoader : MonoBehaviour
         public void LoadSceneByName(string sceneName)
         {
             //Start a coroutine to wait until the fade is done
-            StartCoroutine(LoadLevel(SceneManager.GetSceneByName(sceneName).buildIndex));
+            //StartCoroutine(LoadLevel(SceneManager.GetSceneByName(sceneName).buildIndex));
+
+            SceneManager.LoadScene(sceneName);
         }
 
         public void LoadSceneByNextInArray(){

@@ -22,7 +22,12 @@ using UnityEngine.Serialization;
         public void OnDisable()
         { 
             _controls.Disable();
-        } 
+        }
+
+        private void Start()
+        {
+            FloorManager.Instance.PauseManager.userInput = this;
+        }
 
         public void SwitchInputToPauseScreen()
         {

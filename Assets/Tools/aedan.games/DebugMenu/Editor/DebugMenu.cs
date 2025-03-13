@@ -7,13 +7,13 @@ public class DebugMenu : EditorWindow
 {
     private string[] aedanScenes = new string[]
     {
-        "Assets/Scenes/AedanScenes/Scene 0 - Title Screen.unity",
-        "Assets/Scenes/AedanScenes/Scene 1 - Day 1 Evening.unity",
-        "Assets/Scenes/AedanScenes/Scene 2 - Day 2 Morning.unity",
-        "Assets/Scenes/AedanScenes/Scene 3 - Day 2 Evening.unity",
-        "Assets/Scenes/AedanScenes/Scene 4 - Day 3 Morning 1.unity",
-        "Assets/Scenes/AedanScenes/Scene 5 - Day 3 Morning 2.unity",
-        "Assets/Scenes/AedanScenes/Scene 6 - Day 3 Evening.unity"
+        "Assets/Scenes/AedanScenes/AScene 0 - Title Screen.unity",
+        "Assets/Scenes/AedanScenes/AScene 1 - Day 1 Evening.unity",
+        "Assets/Scenes/AedanScenes/AScene 2 - Day 2 Morning.unity",
+        "Assets/Scenes/AedanScenes/AScene 3 - Day 2 Evening.unity",
+        "Assets/Scenes/AedanScenes/AScene 4 - Day 3 Morning 1.unity",
+        "Assets/Scenes/AedanScenes/AScene 5 - Day 3 Morning 2.unity",
+        "Assets/Scenes/AedanScenes/AScene 6 - Day 3 Evening.unity"
     };
 
     private string[] scenes = new string[]

@@ -27,6 +27,7 @@ public class FloorManager : MonoBehaviour
 
         [Header("PauseScreen")] 
         public GameObject pauseScreen;
+        public PauseManager PauseManager;
 
         // Awake is called before any Start functions, across scripts.
         // private void Awake()

@@ -1,12 +1,10 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class ItemObjectScript : MonoBehaviour
     {
-        #region --- Initialization ---
         
         [Header("1. Is your item an interactable?")]
         public bool interactableWithChoice;
@@ -36,6 +34,8 @@ public class ItemObjectScript : MonoBehaviour
         private GameObject _cat;
         private CatInteractionScript _catInteractionScript;
 
+
+
         private void Start()
         {
             if (gameObject != GameObject.FindWithTag("CatPNG")) return;
@@ -43,7 +43,6 @@ public class ItemObjectScript : MonoBehaviour
             _catInteractionScript = _cat.GetComponent<CatInteractionScript>();
         }
         
-        #endregion
         
         private void Update()
         {
@@ -70,6 +69,17 @@ public class ItemObjectScript : MonoBehaviour
             {
                 _choiceHasBeenMade = true;
             }
+
+            if (InteractableItemController.clickedYes && !_choiceHasBeenMade)
+            {
+                _choiceHasBeenMade = true;
+            }
+            
+        
+            
+    
+
+            
         }
         // <3 --- The below comment is to serve as inspiration for how NOT to code. --- <3
         // if ((UserInput.Interact && _playerIsInTrigger && !InItemCutscene && (!alreadyUsed || !canNotInteractMultiple)) || (autoInteract && _playerIsInTrigger && !InItemCutscene && (!alreadyUsed || !canNotInteractMultiple)))
