@@ -9,8 +9,32 @@ public class UIBounceOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExit
     // Speed (frequency) of the bounce
     public float bounceSpeed = 3f;
 
+    public bool MainUIBtn = false;
+
+
     private Vector3 originalScale;
     private Coroutine bounceCoroutine;
+
+    private UserInput userInput;
+
+    
+
+    void Update()
+    {
+        if (UserInput.AnyKeyOrStart)
+        {
+            HandleAnyButtonPress();
+        }
+    }
+
+    private void HandleAnyButtonPress()
+    {
+        // If MainUIBtn is enabled and no UI element is currently selected, select this GameObject.
+        if (MainUIBtn && EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -25,6 +49,10 @@ public class UIBounceOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExit
             StopCoroutine(bounceCoroutine);
         }
         bounceCoroutine = StartCoroutine(BounceOnce());
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -36,6 +64,11 @@ public class UIBounceOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExit
             bounceCoroutine = null;
         }
         transform.localScale = originalScale;
+
+        if (EventSystem.current != null)
+        {
+        EventSystem.current.SetSelectedGameObject(null);
+        }
     }
 
     private IEnumerator BounceOnce()

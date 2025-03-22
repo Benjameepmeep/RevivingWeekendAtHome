@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Refridgerator
   itemText: Nothing is better than a good meal!
-  itemImage: {fileID: 21300000, guid: 4559d1815ca696044aceca2866836f46, type: 3}
+  itemImage: {fileID: 21300000, guid: cf33623c500a07c4c9e267c26fc60f96, type: 3}
   itemSize: {x: 6, y: 3}
   itemAudio: {fileID: 8300000, guid: 7b168f869da791142a94fab5281bb2fb, type: 3}
   cutSceneAudio: {fileID: 8300000, guid: fc2823997cab15a42a403a3496dc8331, type: 3}
+  timeline: {fileID: 0}
+  PublicBoolToChange: 
+  SetBoolToTrue: 0

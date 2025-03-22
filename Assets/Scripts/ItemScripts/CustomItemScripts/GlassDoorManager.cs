@@ -9,44 +9,72 @@ using UnityEngine;
         [SerializeField] private AudioClip doorClosing, doorOpening;
         
         private bool _triggerActive;
-        private float _slideTimer;
+
+        private bool _doorActionCooldown = false;
+        
         void Start()
         {
             _collider2D = GetComponent<BoxCollider2D>();
             _animator = GetComponent<Animator>();
             _audioSource = GetComponent<AudioSource>();
 
-            if (DataTransfer.glassDoorOpen)
+            Check();
+
+            
+        }
+
+        private void Check(){
+
+            if (FloorManager.Instance == null){
+                Invoke(nameof(Check), 0.2f);
+
+                return;
+            }
+
+            if (FloorManager.Instance.dataTransfer.glassDoorOpen)
             {
-                _animator.Play("GlassDoorOpen");
+                _animator.Play("GlassDoorOpening");
             }
             else
             {
-                _animator.Play("GlassDoorClosed");
+                _animator.Play("GlassDoorClosing");
             }
+
         }
 
         private IEnumerator PlayerIsNearGlassDoor()
         {
-            yield return new WaitUntil(() => !_triggerActive || UserInput.Interact);
+            yield return new WaitUntil(() => _triggerActive && UserInput.Interact && !_doorActionCooldown);
+            // Start cooldown
+            StartCoroutine(DoorActionCooldown());
 
             if (!_triggerActive) yield break;
             
+           
+            
             // If glassDoor is Open, close it. If glassDoor is Closed, open it.
-            if (DataTransfer.glassDoorOpen)
-            {
-                _animator.Play("GlassDoorOpening");
-                _audioSource.PlayOneShot(doorOpening);
-                StartCoroutine(UpdateCatPath(true));
-            }
-            else
+            if (FloorManager.Instance.dataTransfer.glassDoorOpen)
             {
                 _animator.Play("GlassDoorClosing");
                 _audioSource.PlayOneShot(doorClosing);
                 StartCoroutine(UpdateCatPath(false));
             }
-            DataTransfer.OpenOrCloseGlassDoor();
+            else
+            {
+                _animator.Play("GlassDoorOpening");
+                _audioSource.PlayOneShot(doorOpening);
+                StartCoroutine(UpdateCatPath(true));
+                FloorManager.Instance.dataTransfer.numberOfTimesOpenedDoorOrCatFlap++;
+            }
+            FloorManager.Instance.dataTransfer.OpenOrCloseGlassDoor();
             yield return PlayerIsNearGlassDoor();
+        }
+        
+        private IEnumerator DoorActionCooldown()
+        {
+            _doorActionCooldown = true;
+            yield return new WaitForSecondsRealtime(2f);
+            _doorActionCooldown = false;
         }
 
         private IEnumerator UpdateCatPath(bool doorIsOpening)

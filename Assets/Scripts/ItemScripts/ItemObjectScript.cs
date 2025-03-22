@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,7 +16,46 @@ public class ItemObjectScript : MonoBehaviour
         [Header("(3.) If interactable, give it an int to show after being used. Comes after 'Yes' choice:")]
         public int usedInteractableInt;
         
-        private bool _choiceHasBeenMade;
+        // Use serialized field to persist choice state with the object
+        [SerializeField] private bool _choiceHasBeenMade = false;
+
+        // Local interaction state variables 
+        private bool _clickedYes;
+        private bool _clickedNo;
+        private bool _walkedAway;
+
+        // Public methods to set interaction states from InteractableItemController
+        public void SetClickedYes() 
+        {
+            _clickedYes = true;
+            if (!_choiceHasBeenMade)
+            {
+                _choiceHasBeenMade = true;
+            }
+        }
+
+        public void SetClickedNo() 
+        {
+            _clickedNo = true;
+        }
+
+        public void SetWalkedAway() 
+        {
+            _walkedAway = true;
+        }
+
+        public void ResetInteractionState()
+        {
+            _clickedYes = false;
+            _clickedNo = false;
+            _walkedAway = false;
+        }
+
+        // Public accessor for the choice state
+        public bool HasChoiceBeenMade()
+        {
+            return _choiceHasBeenMade;
+        }
 
         [Header("If player enters the object's trigger - autoInteract.")]
         public bool autoInteract;
@@ -33,7 +73,6 @@ public class ItemObjectScript : MonoBehaviour
 
         private GameObject _cat;
         private CatInteractionScript _catInteractionScript;
-
 
 
         private void Start()
@@ -65,20 +104,18 @@ public class ItemObjectScript : MonoBehaviour
                 StartCoroutine(RemoveUnwantedScenes());
             }
             
-            if (InteractableItemController.clickedYes && !_choiceHasBeenMade)
-            {
-                _choiceHasBeenMade = true;
-            }
-
-            if (InteractableItemController.clickedYes && !_choiceHasBeenMade)
+            // Use local _clickedYes variable instead of the static InteractableItemController.clickedYes
+            if (_clickedYes && !_choiceHasBeenMade)
             {
                 _choiceHasBeenMade = true;
             }
             
-        
-            
-    
-
+            // Handle walked away state locally
+            if (_walkedAway)
+            {
+                _walkedAway = false;
+                // Additional logic for handling walked away state if needed
+            }
             
         }
         // <3 --- The below comment is to serve as inspiration for how NOT to code. --- <3
@@ -95,14 +132,19 @@ public class ItemObjectScript : MonoBehaviour
 
             currentTriggeredObject = gameObject;
             Debug.Log("CurrentTriggeredObject assigned to: " + currentTriggeredObject.name);
+
             
+
             if (autoInteract)
             {
+                
                 OpenYourItemScene();
                 if (disableAutoInteractAfterFirstAutoInteract)
                 {
                     autoInteract = false;
                 }
+                //FloorManager.Instance.player.GetComponent<PlayerMovement>().LockMovementUntilKeyRelease(); // allows them to walk after letting go of keys
+
             }
             else
             {
@@ -113,6 +155,9 @@ public class ItemObjectScript : MonoBehaviour
             {
                 StartCoroutine(_catInteractionScript.CheckIfCatShouldStop());
             }
+
+            
+
         }
 
         private IEnumerator InsideItemTrigger()
@@ -143,6 +188,11 @@ public class ItemObjectScript : MonoBehaviour
             {
                 StopCoroutine(_catInteractionScript.CheckIfCatShouldStop());
             }
+
+            if (autoInteract)
+            {
+                _walkedAway = true;
+            }
         }
         
         #endregion
@@ -150,6 +200,10 @@ public class ItemObjectScript : MonoBehaviour
         #region --- Opening & Loading Item Scenes ---
         private void OpenYourItemScene()
         {
+            if (GetComponent<AudioSource>() != null)
+            {
+                GetComponent<AudioSource>().Play();
+            }
             // This is 2 because of main gameScene + item Scene... (DontDestroyOnLoad Scene doesn't count)
             if (SceneManager.loadedSceneCount > 2)
             {
@@ -157,6 +211,12 @@ public class ItemObjectScript : MonoBehaviour
             }
             else
             {
+                if (interactableWithChoice)
+                {
+                FloorManager.Instance.player.GetComponent<PlayerMovement>().permaLockMovement = true;
+                }
+                
+
                 if (currentlyOpeningItem) return;
                 currentlyOpeningItem = true;
                 currentObjectInt = thisObjectInt;
@@ -165,14 +225,18 @@ public class ItemObjectScript : MonoBehaviour
                 Debug.Log("Opening Item Scene of: " + gameObject);
                 if (interactableWithChoice)
                 {
-                    if (_choiceHasBeenMade)
+                    if (_choiceHasBeenMade) //for revisiting the interactable later
                     {
                         StartCoroutine(LoadAdditiveScene("UsedInteractable")); 
+                        
+                
+                        FloorManager.Instance.player.GetComponent<PlayerMovement>().permaLockMovement = false;
+                
                     }
                     else
                     {
+                        FloorManager.Instance.eventSystemMain.DisableEventSystem();
                         StartCoroutine(LoadAdditiveScene("Interactable")); 
-                        EventSystemMain.Instance.DisableEventSystem();
 
                     }
                 }

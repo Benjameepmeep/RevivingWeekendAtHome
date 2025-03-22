@@ -23,7 +23,7 @@ using UnityEngine.Rendering;
             if (collision == null) return;
             if (!collision.CompareTag("Cat")) return;
             
-            DataTransfer.catOutside = true;
+            FloorManager.Instance.dataTransfer.catOutside = true;
             
             Debug.Log("Cat Is Outside");
         }
@@ -33,7 +33,7 @@ using UnityEngine.Rendering;
             if (collision == null) return;
             if (!collision.CompareTag("Cat")) return;
             
-            DataTransfer.catOutside = false;
+            FloorManager.Instance.dataTransfer.catOutside = false;
             Debug.Log("Cat Is Inside");
             // The line is to prevent errors during Unity Load/Unload in Editor with missing SortingGroup.
             if (catSortingGroup == null)

@@ -3,22 +3,27 @@ using UnityEngine;
 
 public class CatFoodFull : MonoBehaviour
 {
-    public static bool CatBowlFull;
-    private SpriteRenderer _sprite;
+    [SerializeField] private Sprite[] sprites;
+    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
-        _sprite = gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
     void Update()
     {
-        if (CatBowlFull)
+
+        if (FloorManager.Instance == null)
         {
-            _sprite.enabled = true;
+            return;
+        }
+        if (FloorManager.Instance.dataTransfer.CatBowlFull)
+        {
+            spriteRenderer.sprite = sprites[1];
         }
         else
         {
-            _sprite.enabled = false;
+            spriteRenderer.sprite = sprites[0];
         }
     }
 }

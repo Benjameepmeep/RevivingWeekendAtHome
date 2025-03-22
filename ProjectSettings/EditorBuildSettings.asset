@@ -6,26 +6,26 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Scene 0 - Title Screen.unity
-    guid: 37df2bdc9fa79ca42bebd33109f94848
+    path: Assets/Scenes/AedanScenes/AScene 0 - Title Screen.unity
+    guid: fa98ad565333f2549901292f1e42dfa8
   - enabled: 1
-    path: Assets/Scenes/Scene 1 - Day 1 Evening.unity
-    guid: 769a144be51074f499b02799d8f42612
+    path: Assets/Scenes/AedanScenes/AScene 1 - Day 1 Evening.unity
+    guid: 3d52551a1544b7a4792f92c0144b7eba
   - enabled: 1
-    path: Assets/Scenes/Scene 2 - Day 2 Morning.unity
-    guid: 800fa97b75f5bea4cacaa8f01537d515
+    path: Assets/Scenes/AedanScenes/AScene 2 - Day 2 Morning.unity
+    guid: 59816b96e8a93b740860b0423ebae802
   - enabled: 1
-    path: Assets/Scenes/Scene 3 - Day 2 Evening.unity
-    guid: 52eded667af6c0b40a22cf0c4f45731d
+    path: Assets/Scenes/AedanScenes/AScene 3 - Day 2 Evening.unity
+    guid: 049d6f49c934fd947bfac495afb209dd
   - enabled: 1
-    path: Assets/Scenes/Scene 4 - Day 3 Morning 1.unity
-    guid: 7c0cdf758f5cf72438aa1b0360b82321
+    path: Assets/Scenes/AedanScenes/AScene 4 - Day 3 Morning 1.unity
+    guid: cbdc8a5e1c90fba4788263a2b124ead8
   - enabled: 1
-    path: Assets/Scenes/Scene 5 - Day 3 Morning 2.unity
-    guid: 7ac6f3a8da4a87d4c98e73a3f0924e17
+    path: Assets/Scenes/AedanScenes/AScene 5 - Day 3 Morning 2.unity
+    guid: b9e9a6ca2782a7644ab83fa1d129c680
   - enabled: 1
-    path: Assets/Scenes/Scene 6 - Day 3 Evening.unity
-    guid: 24cd706aa89451e428a8c85ab7585bdb
+    path: Assets/Scenes/AedanScenes/AScene 6 - Day 3 Evening.unity
+    guid: 36c960a91de639c44aa4df3dc7b5ca1e
   - enabled: 1
     path: Assets/Scenes/ItemScenes/Item.unity
     guid: 038fd81c49927224d9fd0daded2512a3
@@ -47,27 +47,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ItemScenes/QuitWarning Scene.unity
     guid: 891654514bbadc5479051141d6d3173a
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 0 - Title Screen.unity
-    guid: fa98ad565333f2549901292f1e42dfa8
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 1 - Day 1 Evening.unity
-    guid: 3d52551a1544b7a4792f92c0144b7eba
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 2 - Day 2 Morning.unity
-    guid: 59816b96e8a93b740860b0423ebae802
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 3 - Day 2 Evening.unity
-    guid: 049d6f49c934fd947bfac495afb209dd
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 4 - Day 3 Morning 1.unity
-    guid: cbdc8a5e1c90fba4788263a2b124ead8
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 5 - Day 3 Morning 2.unity
-    guid: b9e9a6ca2782a7644ab83fa1d129c680
-  - enabled: 1
-    path: Assets/Scenes/AedanScenes/AScene 6 - Day 3 Evening.unity
-    guid: 36c960a91de639c44aa4df3dc7b5ca1e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: eef8674e09793144eb3ae5fb1934c6db, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -3,6 +3,9 @@ using Pathfinding;
 using UnityEngine;
 using System;
 using UnityEngine.Serialization;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 // Make sure this script runs before StairsTrigger.cs, in Project Settings, in Script Execution Order.
 public class FloorManager : MonoBehaviour
@@ -10,36 +13,74 @@ public class FloorManager : MonoBehaviour
         public static readonly Lazy<FloorManager> _instance = new Lazy<FloorManager>(() => FindFirstObjectByType<FloorManager>()); 
         public static FloorManager Instance => _instance.Value;        
 
+        [Header("Player")]
+        public GameObject player;
 
         [Header("Bottom Floor")]
         public GameObject bottomFloor;
-        public GameObject stairsBottomFloor;
-        [FormerlySerializedAs("toesTriggerBox")] public BoxCollider2D catTriggerBox;
-        
+        public GameObject stairsLeadingUp;
         [Header("Top Floor")]
         public GameObject topFloor;
-        public GameObject stairsTopFloor;
-        public GameObject bathroomTrigger;
+        public GameObject stairsLeadingDown;
 
+        
         [Header("Cat")] 
         public GameObject cat;
+
+        public BoxCollider2D catTriggerBox;
+
         public SpriteRenderer catSprite;
 
         [Header("PauseScreen")] 
         public GameObject pauseScreen;
         public PauseManager PauseManager;
+        [Header("DataTransfer")] 
+        public DataTransfer dataTransfer;
+        [Header("EventSystem")]
+        public EventSystemMain eventSystemMain;
 
-        // Awake is called before any Start functions, across scripts.
+
+        private float elapsedFadeTime;
+        private float startExposure;
+        private float endExposure;
+        private bool isFadingToBlack = false;
+        private float fadeDuration;
+
+        private ColorAdjustments colorAdjustments;
+        private Volume globalVolume;
+
+        public bool evaluatingOutcome;
+
+
+
         // private void Awake()
         // {
         //     EnableAllFloorsAndItems();
         // }
         
-        // Start is called before the first frame update
-        private void Start()
-        {
-            Invoke(nameof(DisableAllFloorsExceptCurrent), 0.25f);
-        }
+
+    private void OnEnable() 
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+     private void OnDisable()
+    {        
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        player = GameObject.FindWithTag("Player");
+    }
+
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player");
+        Invoke(nameof(DisableAllFloorsExceptCurrent), 0.25f);
+
+    }
 
     private void Update()
     {
@@ -48,62 +89,38 @@ public class FloorManager : MonoBehaviour
 
     private void NullChecks(){
 
-        // if (bottomFloor == null)
-        // {
-        //     bottomFloor = GameObject.FindWithTag("BottomFloor");
-        // }
-
-        // if (stairsBottomFloor == null)
-        // {
-        //     stairsBottomFloor = GameObject.FindWithTag("StairsBottomFloor");
-        // }
-
-        // if (catTriggerBox == null)
-        // {
-        //     catTriggerBox = GameObject.FindWithTag("CatPNG").GetComponent<BoxCollider2D>();
-        // }
-
-        // if (topFloor == null)
-        // {
-        //     topFloor = GameObject.FindWithTag("TopFloor");
-        // }
-
-        // if (stairsTopFloor == null)
-        // {
-        //     stairsTopFloor = GameObject.FindWithTag("StairsTopFloor");
-        // }
-
-        // if (bathroomTrigger == null)
-        // {
-        //     bathroomTrigger = GameObject.FindWithTag("BathroomTrigger");
-        // }
-
-        // if (cat == null)
-        // {
-        //     cat = GameObject.FindWithTag("Cat");
-        // }
-
-        // if (catSprite == null)
-        // {
-        //     catSprite = GameObject.FindWithTag("CatSprite").GetComponent<SpriteRenderer>();
-        // }
-
         if (pauseScreen == null)
         {
-            pauseScreen = GameObject.FindWithTag("PauseScreen");
+            pauseScreen = GameObject.FindWithTag("PauseScene");
         }
     }
 
+    public void EnableCatVisuals()
+    {
+        if (!dataTransfer.catIsDead)
+        {
+            int layerDefault = LayerMask.NameToLayer("Default");
+            cat.layer = layerDefault;
+            catSprite.enabled = true;
+
+        }
+    }
+
+    public void DisableCatVisuals()
+    {
+        if (!dataTransfer.catIsDead)
+        {
+            int layerCat = LayerMask.NameToLayer("Cat");
+            cat.layer = layerCat;
+            catSprite.enabled = false;
+        }
+    }
 
     public void EnableAllFloorsAndItems()
     {
-        if (bottomFloor) bottomFloor.SetActive(true);
-        if (stairsBottomFloor) stairsBottomFloor.SetActive(true);
+
         if (catTriggerBox) catTriggerBox.enabled = true;
 
-        if (topFloor) topFloor.SetActive(true);
-        if (stairsTopFloor) stairsTopFloor.SetActive(true);
-        if (bathroomTrigger) bathroomTrigger.SetActive(true);
 
         if (catSprite) catSprite.enabled = true;
         
@@ -113,9 +130,6 @@ public class FloorManager : MonoBehaviour
 
     public void DisableAllFloorsExceptCurrent()
     {
-        if (topFloor != null) topFloor.SetActive(false);
-        if (stairsTopFloor != null) stairsTopFloor.SetActive(false);
-        if (bathroomTrigger != null) bathroomTrigger.SetActive(false);
         if (pauseScreen != null) pauseScreen.SetActive(false);
         if (catTriggerBox != null) catTriggerBox.enabled = true;
         if (catSprite != null) catSprite.enabled = true;
@@ -123,7 +137,7 @@ public class FloorManager : MonoBehaviour
         if (cat != null) cat.layer = layerDefault;
         // Debug.Log("Current cat layer: Default");
 
-        if (!DataTransfer.catIsDead)
+        if (!dataTransfer.catIsDead)
         {
             StartCoroutine(ScanAndContinue());
         }
@@ -132,10 +146,6 @@ public class FloorManager : MonoBehaviour
             DisableCatStuff();
         }
         
-        if (DataTransfer.onTopFloor)
-        {
-            ApplyTopFloorSettings();
-        }
     }
 
     // Coroutine that waits until scanning is complete.
@@ -157,18 +167,107 @@ public class FloorManager : MonoBehaviour
         }
     }
 
-    // Applies settings specific to when DataTransfer.onTopFloor is true.
-    private void ApplyTopFloorSettings()
+    
+    public void SetBool(string name, bool value)
     {
-        if (bottomFloor != null) bottomFloor.SetActive(false);
-        if (stairsBottomFloor != null) stairsBottomFloor.SetActive(false);
-        if (topFloor != null) topFloor.SetActive(false);
-        if (catTriggerBox != null) catTriggerBox.enabled = false;
-        if (catSprite != null) catSprite.enabled = false;
-        if (pauseScreen != null) pauseScreen.SetActive(false);
+        switch (name)
+    {
+        case "GoToNextDay":
+            GoToNextDay();
+            break;
+        case "CatBowlFull":
+            dataTransfer.CatBowlFull = value;
+            break;
 
-        int layerCat = LayerMask.NameToLayer("Cat");
-        cat.layer = layerCat;
-        Debug.Log("Current cat layer: Cat");
+        case "Evaluate":
+            
+            EvaluateOutcome();
+            break;
+        default:
+            Debug.LogError("FloorManager: SetBool: " + name + " is not a valid variable.");
+            break;
     }
+    }
+
+    public void GoToNextDay()
+    {
+        globalVolume = FindFirstObjectByType<Volume>().GetComponent<Volume>();
+        globalVolume.profile.TryGet(out colorAdjustments);
+
+        StartCoroutine(FadeExposureCoroutine(true));
+
+    }
+
+    public void EvaluateOutcome()
+{
+    switch (true)
+    {
+        case bool _ when dataTransfer.catIsDead && dataTransfer.playerDied:
+            dataTransfer.outcome = DataTransfer.Outcome.Player_dead_cat_dead;
+            break;
+
+        case bool _ when dataTransfer.catIsDead && !dataTransfer.playerDied:
+            dataTransfer.outcome = DataTransfer.Outcome.Player_alive_cat_dead;
+            break;
+
+        case bool _ when !dataTransfer.catIsDead && !dataTransfer.playerDied:
+            dataTransfer.outcome = DataTransfer.Outcome.Player_alive_cat_alive;
+            break;
+
+        case bool _ when dataTransfer.numberOfTimesOpenedDoorOrCatFlap < 1:
+            dataTransfer.outcome = DataTransfer.Outcome.stayed_in_bed_all_day;
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+    private IEnumerator FadeExposureCoroutine(bool toBlack)
+    {
+               
+        fadeDuration = 3f; 
+        elapsedFadeTime = 0f;
+
+        if (toBlack)
+        {
+            startExposure = 0f;
+            endExposure = -15f;
+
+            isFadingToBlack = true;
+        }
+        else
+        {
+            startExposure = -15f;
+            endExposure = 0f;
+            isFadingToBlack = false; 
+        }
+       while (elapsedFadeTime < fadeDuration)
+        {
+            float newExposure = Mathf.Lerp(startExposure, endExposure, elapsedFadeTime / fadeDuration);
+            colorAdjustments.postExposure.Override(newExposure);
+    
+            elapsedFadeTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        colorAdjustments.postExposure.Override(endExposure);
+
+        
+        elapsedFadeTime = 0f;
+        
+        if (toBlack)
+        {
+            isFadingToBlack = false;
+        }
+
+        LoadNextSceneInBuildArray();
+    }
+
+    public void LoadNextSceneInBuildArray(){
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+ 
 }

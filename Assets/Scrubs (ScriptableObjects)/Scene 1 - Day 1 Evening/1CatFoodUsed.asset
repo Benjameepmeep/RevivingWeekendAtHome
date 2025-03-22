@@ -19,3 +19,5 @@ MonoBehaviour:
   itemAudio: {fileID: 8300000, guid: 2fea35190f36f714586dc60c2d129be2, type: 3}
   cutSceneAudio: {fileID: 8300000, guid: 35dab7b6db422ea438c652d4f73f24d1, type: 3}
   timeline: {fileID: 0}
+  FloorManagerBoolToChange: 
+  SetFloorManagerBoolToTrue: 0

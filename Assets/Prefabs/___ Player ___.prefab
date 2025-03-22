@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 8602043979774435906}
+  permaLockMovement: 0
   rb: {fileID: 3910356899982580032}
   moveSpeed: 2.25
 --- !u!95 &8349463884394359618
@@ -154,6 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3ebdf51eebc724385981d8ac37d82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  titleScreenControlsActive: 0
+  pauseScreenControlsActive: 0
+  gameScreenControlsActive: 0
+  cutsceneControlsActive: 0
 --- !u!81 &6339274757590616967
 AudioListener:
   m_ObjectHideFlags: 0
@@ -302,7 +307,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Sprite: {fileID: 7982442557714782795, guid: d558cc7ed28eb92448dc12a777a02ea9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -586,7 +591,7 @@ GameObject:
   - component: {fileID: 477421556911850125}
   - component: {fileID: 3841710729032520145}
   m_Layer: 3
-  m_Name: Light 2D
+  m_Name: PlayerLight 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,7 +632,7 @@ MonoBehaviour:
   m_Intensity: 0.1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000b3a2a252
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -637,9 +642,9 @@ MonoBehaviour:
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
   m_ShadowsEnabled: 1
-  m_ShadowIntensity: 1
-  m_ShadowSoftness: 0.3
-  m_ShadowSoftnessFalloffIntensity: 0.5
+  m_ShadowIntensity: 0.79
+  m_ShadowSoftness: 1
+  m_ShadowSoftnessFalloffIntensity: 0
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:

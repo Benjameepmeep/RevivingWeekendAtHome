@@ -16,6 +16,7 @@ using UnityEngine.Rendering.Universal;
         
         [SerializeField] private float transparencyValue, moveAmount, playerOutdoorLightValue;
         private float _playerLightIntensity;
+        [SerializeField] private bool startOutdoors;
         
         void Start()
         {
@@ -23,28 +24,60 @@ using UnityEngine.Rendering.Universal;
             // and hide all of the outdoor objects.
             
             bottomFloor = GameObject.FindGameObjectsWithTag("BottomFloor");
+
+            kitchenWithDoorAndLamp = new GameObject[]
+            {
+                GameObject.Find("WallShelfKitchen"),
+                GameObject.Find("Oven"),
+                GameObject.Find("KitchenCounterTop"),
+                GameObject.Find("RightSideKitchenCounter"),
+                GameObject.Find("Fridge"),
+                GameObject.Find("CatFlap"),
+                GameObject.Find("Lamp"),
+                GameObject.Find("Glass Door + Trigger")
+            };
             
             player = GameObject.FindWithTag("Player");
 
             _playerLightIntensity = player.GetComponentInChildren<Light2D>().intensity;
             
             playerSortingGroup = player.GetComponent<SortingGroup>();
-            playerSortingGroup.sortingOrder = DataTransfer.playerSortingOrder;
+            
+            Check();
+        }
+
+        private void Check(){
+
+            if (FloorManager.Instance == null)
+            {
+                Invoke(nameof(Check), 0.2f);
+                return;
+            }
+            playerSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.playerSortingOrder;
             
             vfxSortingGroup = GameObject.FindWithTag("VFX").GetComponent<SortingGroup>();
-            vfxSortingGroup.sortingOrder = DataTransfer.vfxSortingOrder;
+            vfxSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.vfxSortingOrder;
+
+            if (startOutdoors)
+            {
+                PlayerStartsOutside(true);
+            }
+            else
+            {
+                PlayerStartsOutside(false);
+            }
         }
         
         public void PlayerStartsOutside(bool startsOutside)
         {
             if (startsOutside)
             {
-                DataTransfer.playerInside = true;
+                FloorManager.Instance.dataTransfer.playerInside = true;
                 PlayerOutdoors();
             }
             else
             {
-                DataTransfer.playerInside = false;
+                FloorManager.Instance.dataTransfer.playerInside = false;
                 PlayerIndoors();
             }
         }
@@ -67,8 +100,8 @@ using UnityEngine.Rendering.Universal;
 
             player.GetComponentInChildren<Light2D>().intensity = _playerLightIntensity;
             
-            DataTransfer.PlayerInsideOrOutside();
-            playerSortingGroup.sortingOrder = DataTransfer.playerSortingOrder;
+            FloorManager.Instance.dataTransfer.PlayerInsideOrOutside();
+            playerSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.playerSortingOrder;
         }
 
         private void PlayerOutdoors()
@@ -90,8 +123,8 @@ using UnityEngine.Rendering.Universal;
 
             player.GetComponentInChildren<Light2D>().intensity = playerOutdoorLightValue;
             
-            DataTransfer.PlayerInsideOrOutside();
-            playerSortingGroup.sortingOrder = DataTransfer.playerSortingOrder;
+            FloorManager.Instance.dataTransfer.PlayerInsideOrOutside();
+            playerSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.playerSortingOrder;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -105,13 +138,13 @@ using UnityEngine.Rendering.Universal;
             // Sets the light2d child of player to an intensity of 0 and then moves down
             // Does opposite when player reenter.
             
-            if (DataTransfer.playerInside)
+            if (FloorManager.Instance.dataTransfer.playerInside)
             {
                 Debug.Log("Player Goes Outdoors");
 
                 PlayerOutdoors();
             }
-            else if (!DataTransfer.playerInside)
+            else if (!FloorManager.Instance.dataTransfer.playerInside)
             {
                 Debug.Log("Player Goes Inside");
             

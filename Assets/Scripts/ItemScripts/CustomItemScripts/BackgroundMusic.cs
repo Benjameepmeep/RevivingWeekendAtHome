@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,60 +6,70 @@ using UnityEngine;
     {
         [SerializeField] private AudioSource turnOnSfxSource;
         [SerializeField] private AudioSource turnOffSfxSource;
-        [SerializeField] private AudioSource musicSource;
+        public AudioSource musicSource;
         [SerializeField] private AudioClip radioMusic;
         
         private void Start()
         {
-            if (!DataTransfer.radioOn)
+            Check();
+        }
+
+        private void Check()
+        {
+            if (FloorManager.Instance == null)
             {
-                StartCoroutine(MuteRadio(0f));
+                Invoke(nameof(Check), 0.2f);
+                return;
             }
-            musicSource.clip = radioMusic;
-            musicSource.Play(0);
-            if (!musicSource.loop)
+
+            if (FloorManager.Instance.dataTransfer.radioOn)
             {
-                musicSource.loop = true;
+                musicSource.mute = false;
+            }
+            else
+            {
+                musicSource.mute = true;
             }
         }
 
         private void Update()
         {
-            if (DataTransfer.onTopFloor)
+            if (FloorManager.Instance == null) return;
+            if (FloorManager.Instance.dataTransfer.onTopFloor)
             {
                 //Debug.Log("On top floor, music reduced to 0.4f.");
-                musicSource.volume = 0.4f;
+                musicSource.volume = 0.1f;
             }
-            else if (!DataTransfer.onTopFloor)
+            else if (!FloorManager.Instance.dataTransfer.onTopFloor)
             {
-                if (DataTransfer.playerInside)
+                if (FloorManager.Instance.dataTransfer.playerInside)
                 {
                     //Debug.Log("Inside bottom floor, music at 1.0f.");
-                    musicSource.volume = 1f;
+                    musicSource.volume = 0.2f;
                 }
-                else if (!DataTransfer.playerInside)
+                else if (!FloorManager.Instance.dataTransfer.playerInside)
                 {
                     //Debug.Log("Outside, music at 0.6f.");
-                    musicSource.volume = 0.6f;
+                    musicSource.volume = 0.1f;
                 }
             }
         }
 
         public void RadioIsBeingInteractedWith()
         {
-            if (DataTransfer.radioOn)
+            if (FloorManager.Instance.dataTransfer.radioOn)
             {
                 // Debug.Log("Radio on and being interacted with");
                 turnOffSfxSource.Play(0);
                 StartCoroutine(MuteRadio(0.30f));
             }
-            else if (!DataTransfer.radioOn)
+            else
             {
                 // Debug.Log("Radio off and being interacted with");
                 turnOnSfxSource.Play(0);
                 StartCoroutine(UnmuteRadio(1.8f));
             }
-            DataTransfer.TurnRadioOnOrOff();
+            FloorManager.Instance.dataTransfer.ToggleRadio();
         }
     
         private IEnumerator UnmuteRadio(float delay)

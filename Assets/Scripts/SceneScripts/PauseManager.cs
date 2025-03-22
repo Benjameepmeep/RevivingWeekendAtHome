@@ -12,23 +12,53 @@ public class PauseManager : MonoBehaviour
     private void Start()
     {
 
-        pauseCanvas = FloorManager.Instance.pauseScreen;;
+        CheckForFloorManager();
 
         CheckForPlayer();
+        
+    }
 
+    private void CheckForFloorManager()
+    {
+        if (FloorManager.Instance == null)
+        {
+            Invoke("CheckForFloorManager", 0.3f);
+            return;
+        }
+        pauseCanvas = FloorManager.Instance.pauseScreen;;
+
+        if (pauseCanvas == null)
+            {
+                pauseCanvas = FloorManager.Instance.pauseScreen;
+            }
+            if (pauseCanvas == null)
+            {
+                pauseCanvas = GameObject.FindGameObjectWithTag("PauseScene");
+            }
 
         if (pauseCanvas.activeSelf)
         {
-            DataTransfer.isPause = false;
+            if (pauseCanvas == null)
+            {
+                pauseCanvas = FloorManager.Instance.pauseScreen;
+            }
+            if (pauseCanvas == null)
+            {
+                pauseCanvas = GameObject.FindGameObjectWithTag("PauseScene");
+            }
+
+            FloorManager.Instance.dataTransfer.isPause = false;
             SetPauseScreenInactive();
         }
-
-        
     }
 
     private void Update()
     {
-        if (userInput == null) return;
+        if (userInput == null)
+        {
+            CheckForPlayer();
+            return;
+        } 
 
         if (UserInput.Escape)
         {
@@ -58,7 +88,7 @@ public class PauseManager : MonoBehaviour
         CheckForPlayer();
         userInput.SwitchInputToPauseScreen();
         pauseCanvas.SetActive(true);
-        DataTransfer.isPause = true;
+        FloorManager.Instance.dataTransfer.isPause = true;
     }
 
     public void SetPauseScreenInactive()
@@ -75,7 +105,7 @@ public class PauseManager : MonoBehaviour
         }
         pausedDuringCutscene = false;
         pauseCanvas.SetActive(false);
-        DataTransfer.isPause = false; 
+        FloorManager.Instance.dataTransfer.isPause = false; 
     }
 
     private void CheckForPlayer(){
@@ -85,6 +115,20 @@ public class PauseManager : MonoBehaviour
             userInput = GameObject.FindGameObjectWithTag("Player").GetComponent<UserInput>();
         }
 
+    }
+
+    public void GoBackToMainMenu(string sceneName)
+    {
+        Time.timeScale = 1f;
+        CheckForPlayer();
+
+        pausedDuringCutscene = false;
+        pauseCanvas.SetActive(false);
+
+        userInput.SwitchInputToTitleScreen();
+        FloorManager.Instance.dataTransfer.isPause = false;
+
+        FindFirstObjectByType<BackToMainMenu>().BackToMainMenuScene(sceneName);
     }
 }
 

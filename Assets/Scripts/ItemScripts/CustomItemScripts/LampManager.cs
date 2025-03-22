@@ -9,13 +9,26 @@ using UnityEngine.Rendering.Universal;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip lampOnSfx, lampOffSfx;
     
-        private bool _triggerActive;
+        private bool _playerInTriggerArea;
+        private bool _interactCooldown;
 
         private void Start()
         {
             lampLight = GetComponent<Light2D>();
 
-            if (DataTransfer.Instance.lampOn)
+            
+            Check();
+        }
+
+        private void Check(){
+
+            if (FloorManager.Instance == null){
+                Invoke(nameof(Check), 0.2f);
+
+                return;
+            }
+
+            if (FloorManager.Instance.dataTransfer.lampOn)
             {
                 lampLight.enabled = true;
             }
@@ -23,47 +36,53 @@ using UnityEngine.Rendering.Universal;
             {
                 lampLight.enabled = false;
             }
-            // StartCoroutine(NewScene());
         }
         
         private IEnumerator NewScene()
         {
             yield return null;
-            lampLight.enabled = DataTransfer.Instance.lampOn;
+            lampLight.enabled = FloorManager.Instance.dataTransfer.lampOn;
         }
 
-        private IEnumerator PlayerNearLamp()
+        private void Update()
         {
-            yield return new WaitUntil(() => !ItemObjectScript.inItemScene && UserInput.Interact || !_triggerActive);
-            if (!_triggerActive) yield break;
-            DataTransfer.Instance.TurnLampOnOrOff();
-            yield return null;
-            if (DataTransfer.Instance.lampOn)
+            if (_playerInTriggerArea && UserInput.Interact && !ItemObjectScript.inItemScene && !_interactCooldown)
+            {
+                StartCoroutine(ToggleLamp());
+            }
+        }
+
+        private IEnumerator ToggleLamp()
+        {
+            _interactCooldown = true;
+            
+            FloorManager.Instance.dataTransfer.ToggleLamp();
+            
+            if (FloorManager.Instance.dataTransfer.lampOn)
             {
                 audioSource.PlayOneShot(lampOnSfx);
-                // lampLight.intensity = 1;
                 lampLight.enabled = true; 
             }
-            else if (!DataTransfer.Instance.lampOn)
+            else
             {
                 audioSource.PlayOneShot(lampOffSfx);
-                // lampLight.intensity = 0;
                 lampLight.enabled = false;
             }
-            yield return PlayerNearLamp();
+            
+            yield return new WaitForSeconds(0.3f); // Small cooldown to prevent multiple toggles
+            _interactCooldown = false;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return; 
-            _triggerActive = true;
-            StartCoroutine(PlayerNearLamp());
+            _playerInTriggerArea = true;
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return; 
-            _triggerActive = false;
+            _playerInTriggerArea = false;
         }
     }
 

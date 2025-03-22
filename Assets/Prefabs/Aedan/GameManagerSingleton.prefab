@@ -97,13 +97,13 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 0.44313726, g: 0.44313726, b: 0.44313726, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.990566, g: 0.6603773, b: 0.6603773, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.2
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -120,18 +120,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8583585400285058271}
-        m_TargetAssemblyTypeName: SceneScripts.LevelLoader, Assembly-CSharp
-        m_MethodName: LoadTitleScreen
-        m_Mode: 1
+      - m_Target: {fileID: 7255776815508161464}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: GoBackToMainMenu
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Scene 0 - Title Screen
+          m_StringArgument: AScene 0 - Title Screen
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
 --- !u!1 &696054888306681592
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,8 +277,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Music_Scripts.AudioController, Assembly-CSharp
+      - m_Target: {fileID: 6126662828545794454}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
         m_MethodName: SetSfxVolume
         m_Mode: 2
         m_Arguments:
@@ -382,6 +382,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 54693cb1a629091438be814a797a46ff, type: 2}
+  sfxVolumeSlider: {fileID: 6772888316915350506}
+  musicVolumeSlider: {fileID: 3261083481547904394}
+  dialogueVolumeSlider: {fileID: 4740890974724973135}
 --- !u!82 &1521190444999470110
 AudioSource:
   m_ObjectHideFlags: 0
@@ -658,10 +661,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2206903690529166233}
   - {fileID: 3398904200589690425}
   - {fileID: 142098154895227186}
   - {fileID: 5810759746781509797}
-  - {fileID: 2206903690529166233}
   - {fileID: 5637247949115862026}
   - {fileID: 7008338523583608149}
   - {fileID: 3632185271499423016}
@@ -1197,15 +1200,15 @@ RectTransform:
   m_GameObject: {fileID: 3900757184701330694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.8153, y: 6.5752406, z: 3.4395}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7008338523583608149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 691, y: 171}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.7341613, y: 0.34191558}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5017629139579730537
 CanvasRenderer:
@@ -1237,7 +1240,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 2cd8ffd86404e9147bb0572e7bcc2861, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1303,7 +1306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.76862746}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1401,6 +1404,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampOn: 0
+  tvOn: 1
+  radioOn: 1
+  glassDoorOpen: 0
+  bedroomDoorOpen: 0
+  playerCanMove: 1
+  onTopFloor: 0
+  playerInside: 1
+  catFlapClosed: 1
+  catIsDead: 0
+  catOutside: 0
+  CatBowlFull: 0
+  isPause: 0
+  playerSortingOrder: 50
+  catSortingOrderInside: 50
+  CatSortingOrderOutside: -1
+  vfxSortingOrder: 5
 --- !u!1 &5497105846765447757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,8 +1510,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Music_Scripts.AudioController, Assembly-CSharp
+      - m_Target: {fileID: 6126662828545794454}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
         m_MethodName: SetDialogueVolume
         m_Mode: 2
         m_Arguments:
@@ -1821,6 +1840,7 @@ GameObject:
   - component: {fileID: 1504694795704964320}
   - component: {fileID: 4264630140757307764}
   - component: {fileID: 523626447035250662}
+  - component: {fileID: 2681687141603459372}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1865,7 +1885,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6952081989993591495}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
@@ -1890,6 +1910,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76884325fa76e4d4babbaf872725ec1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2681687141603459372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952081989993591495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_PointAction: {fileID: 4777861506599185827, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_MoveAction: {fileID: -3995557856883998974, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_SubmitAction: {fileID: 7097327185094131915, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_CancelAction: {fileID: 3661431589643520884, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_LeftClickAction: {fileID: 3576971661510487947, guid: dd43142c71a6efa4ba33fef1e2d5d83d, type: 3}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 0
+  m_PointerBehavior: 2
+  m_CursorLockBehavior: 0
 --- !u!1 &6962262205362656336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,6 +1950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1353183207686411177}
   - component: {fileID: 3261083481547904394}
+  - component: {fileID: 6210939649489987096}
   m_Layer: 5
   m_Name: Music Slider
   m_TagString: Untagged
@@ -1980,8 +2031,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Music_Scripts.AudioController, Assembly-CSharp
+      - m_Target: {fileID: 6126662828545794454}
+        m_TargetAssemblyTypeName: AudioController, Assembly-CSharp
         m_MethodName: SetMusicVolume
         m_Mode: 2
         m_Arguments:
@@ -1992,6 +2043,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6210939649489987096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962262205362656336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a99d5348137c4aa498d45149a9101eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7148644013687086208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2124,16 +2187,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a945db60e2d5945b91eaca2d4df58c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   bottomFloor: {fileID: 0}
-  stairsBottomFloor: {fileID: 0}
-  catTriggerBox: {fileID: 0}
+  stairsLeadingUp: {fileID: 0}
   topFloor: {fileID: 0}
-  stairsTopFloor: {fileID: 0}
-  bathroomTrigger: {fileID: 0}
+  stairsLeadingDown: {fileID: 0}
   cat: {fileID: 0}
+  catTriggerBox: {fileID: 0}
   catSprite: {fileID: 0}
   pauseScreen: {fileID: 7635969878848677423}
   PauseManager: {fileID: 7255776815508161464}
+  dataTransfer: {fileID: 6045841807525590165}
+  eventSystemMain: {fileID: 523626447035250662}
 --- !u!1 &7375495854352955439
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,7 +2428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -421.90555, y: 220.9}
+  m_AnchoredPosition: {x: -423, y: 254}
   m_SizeDelta: {x: 202.2557, y: 56.9608}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5996554983774179259
@@ -2465,8 +2530,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2519,7 +2584,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7635969878848677423}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -2605,12 +2670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userInput: {fileID: 0}
-  transferBetweenLoad: {fileID: 0}
-  transition: {fileID: 3583370485470611153}
-  noFadeOut: 1
-  transitionTime: 1.3
   scenesToLoad: []
-  transitionSpeed: 1
 --- !u!1 &8392585430577168431
 GameObject:
   m_ObjectHideFlags: 0
@@ -2623,6 +2683,7 @@ GameObject:
   - component: {fileID: 6809503731299397335}
   - component: {fileID: 6633129393856202311}
   - component: {fileID: 7594137287684844237}
+  - component: {fileID: 3597858996727695558}
   m_Layer: 5
   m_Name: Continue Button
   m_TagString: Untagged
@@ -2708,13 +2769,13 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.44313726, g: 0.44313726, b: 0.44313726, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9811321, g: 0.644832, b: 0.644832, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.2
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -2731,8 +2792,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneScripts.PauseManager, Assembly-CSharp
+      - m_Target: {fileID: 7255776815508161464}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
         m_MethodName: SetPauseScreenInactive
         m_Mode: 1
         m_Arguments:
@@ -2742,7 +2803,19 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
+--- !u!114 &3597858996727695558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8392585430577168431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24526f1b8e7425e489c8a6440d5991b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8518911574989823663
 GameObject:
   m_ObjectHideFlags: 0

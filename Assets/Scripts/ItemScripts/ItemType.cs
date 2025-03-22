@@ -12,5 +12,8 @@ using UnityEngine.Timeline;
         public AudioClip itemAudio;
         public AudioClip cutSceneAudio;
         public TimelineAsset timeline;
+
+        public string PublicBoolToChange;
+        public bool SetBoolToTrue;
     }
 

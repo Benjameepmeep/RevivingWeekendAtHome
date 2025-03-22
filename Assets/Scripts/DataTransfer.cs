@@ -3,39 +3,47 @@ using System;
 
 public class DataTransfer : MonoBehaviour
 {
-    public static readonly Lazy<DataTransfer> _instance = new Lazy<DataTransfer>(() => FindFirstObjectByType<DataTransfer>()); 
-    public static DataTransfer Instance => _instance.Value;    
-    
+        
     public bool lampOn;
-    public static bool tvOn = true;
-    public static bool radioOn = true;
-    public static bool glassDoorOpen;
-    public static bool bedroomDoorOpen;
-    public static bool playerCanMove = true; // PlayerCanMove should be true from the start.
-    public static bool onTopFloor;
-    public static bool insideBathroom;
-    public static bool playerInside = true;
-    public static bool catFlapClosed = true;
-    public static bool catIsDead;
-    public static bool catOutside;
-    public static bool isPause = false;
-    public static int playerSortingOrder = 50;
-    public static int catSortingOrderInside = 50;
-    public const int CatSortingOrderOutside = -1;
-    public static int vfxSortingOrder = 5;
+    public bool tvOn = true;
+    public bool radioOn = true;
+    public bool glassDoorOpen;
+    public bool bedroomDoorOpen;
+    public bool playerCanMove = true; // PlayerCanMove should be true from the start.
+    public bool onTopFloor;
+    public bool playerInside = true;
+    public bool catFlapClosed = true;
+    public bool catIsDead;
+    public bool catOutside;
+    public bool CatBowlFull;
+
+    public bool playerDied;
+
+    public int numberOfTimesOpenedDoorOrCatFlap;
+
+    public enum Outcome
+        {
+            Player_alive_cat_alive,
+            Player_alive_cat_dead,
+            Player_dead_cat_dead,
+
+            stayed_in_bed_all_day,
+        }
+
+    public Outcome outcome;
+    public bool isPause = false;
+    public int playerSortingOrder = 50;
+    public int catSortingOrderInside = 50;
+    public int CatSortingOrderOutside = -1;
+    public int vfxSortingOrder = 5;
     
     
     private void Update()
     {
-        if (playerInside && !onTopFloor)
+        if (playerInside)
         {
             playerSortingOrder = 50;
             catSortingOrderInside = 50;
-        }
-        else if (playerInside && onTopFloor)
-        {
-            catSortingOrderInside = -1;
-            
         }
         else if (!playerInside)
         {
@@ -43,113 +51,59 @@ public class DataTransfer : MonoBehaviour
             catSortingOrderInside = 50;
         }
     }
-    public void TurnLampOnOrOff()
+    public void ToggleLamp()
     {
-        if (lampOn)
-        {
-           lampOn = false;
-        }
-        else if (!lampOn)
-        {
-            lampOn = true;
-        }
+        lampOn = !lampOn;
     }
-    public static void TurnTVOnOrOff()
+    public void ToggleTVOn()
     {
-        if (tvOn)
-        {
-            tvOn = false;
-        }
-        else if (!tvOn)
-        {
-            tvOn = true;
-        }
+        tvOn = !tvOn;
     }
-    public static void TurnRadioOnOrOff()
+    public void ToggleRadio()
     {
-        if (radioOn)
-        {
-            radioOn = false;
-        }
-        else if (!radioOn)
-        {
-            radioOn = true;
-        }
+        radioOn = !radioOn;
     }
-    public static void OpenOrCloseGlassDoor()
+    public void OpenOrCloseGlassDoor()
     {
-        if (glassDoorOpen)
-        {
-            glassDoorOpen = false;
-        }
-        else if (!glassDoorOpen)
-        {
-            glassDoorOpen = true;
-        }
+        glassDoorOpen = !glassDoorOpen;
     }
 
-    public static void OpenOrCloseBedroomDoor()
+    public void OpenOrCloseBedroomDoor()
     {
-        if (bedroomDoorOpen)
-        {
-            bedroomDoorOpen = false;
-        }
-        else if (!bedroomDoorOpen)
-        {
-            bedroomDoorOpen = true;
-        }
+       bedroomDoorOpen = !bedroomDoorOpen;
     }
-    public static void SwitchCanPlayerMove(UserInput userInput)
+    public void SwitchCanPlayerMove(UserInput userInput)
     {
         if (playerCanMove)
         {
             playerCanMove = false;
             userInput.OnDisable();
         }
-        else if (!playerCanMove)
+        else
         {
             playerCanMove = true;
             userInput.OnEnable();
         }
     }
-    public static void SwitchFloors()
+    public void SwitchFloors()
     {
         if (onTopFloor)
         {
-            onTopFloor = false;
             catSortingOrderInside = 50;
         }
-        else if (!onTopFloor)
+        else
         {
-            onTopFloor = true;
             catSortingOrderInside = -1;
         }
     }
 
-    public static void EnterOrExitBathroom()
-    {
-        if (insideBathroom)
-        {
-            insideBathroom = false;
-        }
-        else
-        {
-            insideBathroom = true;
-        }
-    }
 
-    public static void OpenOrCloseCatFlapDoor()
+
+    public void ToggleCatFlap()
     {
-        if (catFlapClosed)
-        {
-            catFlapClosed = false;
-        }
-        else
-        {
-            catFlapClosed = true;
-        }
+        catFlapClosed = !catFlapClosed;
     }
-    public static void PlayerInsideOrOutside()
+    public void PlayerInsideOrOutside()
     {
         if (playerInside)
         {
@@ -157,7 +111,7 @@ public class DataTransfer : MonoBehaviour
             vfxSortingOrder = 60;
             playerInside = false;
         }
-        else if (!playerInside)
+        else
         {
             playerSortingOrder = 50;
             vfxSortingOrder = 5;

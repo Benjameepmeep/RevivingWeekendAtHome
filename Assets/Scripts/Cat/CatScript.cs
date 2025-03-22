@@ -36,39 +36,55 @@ using Random = UnityEngine.Random;
         {
             cat = transform.parent.gameObject;
 
-            FloorManager.Instance.catTriggerBox = GetComponent<BoxCollider2D>();
-            FloorManager.Instance.catSprite = cat.GetComponent<SpriteRenderer>();
-            FloorManager.Instance.cat = cat;
-
             catSortingGroup = cat.GetComponent<SortingGroup>();
 
-            if (DataTransfer.catOutside)
+
+            Invoke("Check", 0.3f);
+            
+        }
+
+
+        private void Check(){
+            
+            if (FloorManager.Instance == null)
             {
-                catSortingGroup.sortingOrder = DataTransfer.CatSortingOrderOutside;
+                Invoke("Check", 0.15f);
+                return;
+            }
+
+            
+            FloorManager.Instance.cat = cat;
+            FloorManager.Instance.catTriggerBox = GetComponent<BoxCollider2D>();
+            FloorManager.Instance.catSprite = cat.GetComponentInChildren<SpriteRenderer>();
+
+            if (FloorManager.Instance.dataTransfer.catOutside)
+            {
+                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.CatSortingOrderOutside;
                 // Debug.Log("Cat Is Outside");
             }
             else
             {
-                catSortingGroup.sortingOrder = DataTransfer.catSortingOrderInside;
+                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.catSortingOrderInside;
                 // Debug.Log("Cat Is Inside");
             }
         }
 
         private void Update()
         {
+            if (FloorManager.Instance == null) return;
             // TODO: Fix bug that happens when player is outside and walks inside, causing the cat to appear above the inside walls if outside as well.
 
-            if (DataTransfer.catOutside)
+            if (FloorManager.Instance.dataTransfer.catOutside)
             {
-                catSortingGroup.sortingOrder = DataTransfer.CatSortingOrderOutside;
+                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.CatSortingOrderOutside;
             }
-            else if (DataTransfer.catOutside && DataTransfer.playerInside)
+            else if (FloorManager.Instance.dataTransfer.catOutside && FloorManager.Instance.dataTransfer.playerInside)
             {
-                catSortingGroup.sortingOrder = DataTransfer.CatSortingOrderOutside;
+                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.CatSortingOrderOutside;
             }
-            else if (!DataTransfer.catOutside)
+            else if (!FloorManager.Instance.dataTransfer.catOutside)
             {
-                catSortingGroup.sortingOrder = DataTransfer.catSortingOrderInside;
+                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.catSortingOrderInside;
             }
 
             // Consider using Math.Sign to return a value of either -1, 0 or 1, and use that for animations.
@@ -101,6 +117,7 @@ using Random = UnityEngine.Random;
 
         private void FixedUpdate()
         {
+            if (FloorManager.Instance == null) return;
             //Counter For Random Occasional Meows
             if (_timeBetweenMeows > 0)
             {
@@ -123,7 +140,7 @@ using Random = UnityEngine.Random;
                 OnGoalEnter();
             }
 
-            if (!CatFoodFull.CatBowlFull) return;
+            if (!FloorManager.Instance.dataTransfer.CatBowlFull) return;
 
             _goingTowardsCatFood = true;
             goal.transform.position = new Vector3(1, 0, 0);
@@ -152,7 +169,7 @@ using Random = UnityEngine.Random;
             if (_goingTowardsCatFood)
             {
                 yield return new WaitForSeconds(13);
-                CatFoodFull.CatBowlFull = false;
+                FloorManager.Instance.dataTransfer.CatBowlFull = false;
                 _goingTowardsCatFood = false;
             }
 

@@ -27,7 +27,14 @@ using Random = UnityEngine.Random;
         {
             yield return null;
 
-            if (DataTransfer.tvOn)
+
+            while (FloorManager.Instance == null)
+            {
+                yield return null;
+            }
+
+
+            if (FloorManager.Instance.dataTransfer.tvOn)
             {
                 StartCoroutine(ChangeLightContinuously());
             }
@@ -41,15 +48,15 @@ using Random = UnityEngine.Random;
         {
             yield return new WaitUntil(() => !ItemObjectScript.inItemScene && UserInput.Interact || !_triggerActive);
             if (!_triggerActive) yield break;
-            DataTransfer.TurnTVOnOrOff();
+            FloorManager.Instance.dataTransfer.ToggleTVOn();
             yield return null;
-            if (DataTransfer.tvOn)
+            if (FloorManager.Instance.dataTransfer.tvOn)
             {
                 audioSource.PlayOneShot(tvTurningOn);
                 _tvLight.enabled = true; 
                 StartCoroutine(ChangeLightContinuously());
             }
-            else if (!DataTransfer.tvOn)
+            else if (!FloorManager.Instance.dataTransfer.tvOn)
             {
                 audioSource.PlayOneShot(tvTurningOff);
                 _tvLight.enabled = false;
@@ -76,7 +83,7 @@ using Random = UnityEngine.Random;
         
         private IEnumerator ChangeLightContinuously()
         {
-            if (!DataTransfer.tvOn)
+            if (!FloorManager.Instance.dataTransfer.tvOn)
             { 
                 _tvLight.intensity = 0;
                 yield break;

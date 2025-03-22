@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,7 +12,7 @@ public class InteractableItemController : MonoBehaviour
 {
     // TODO: Fix the interactable items.
 
-    private EventSystem _eventSystemInteractable;
+    [SerializeField] private EventSystem _eventSystemInteractable;
     
     public ItemType[] itemScrub;
     public TMP_Text itemName;
@@ -21,10 +22,6 @@ public class InteractableItemController : MonoBehaviour
     public PlayableAsset itemTimeline;
     public PlayableDirector playableDirector;
     
-    // TODO: Check if the new Timeline code works : )
-
-    public static bool clickedYes;
-    public static bool clickedNo;
     private string _sceneToLoad;
 
     private void Awake()
@@ -37,7 +34,7 @@ public class InteractableItemController : MonoBehaviour
     
     private void Start()
     {
-        _eventSystemInteractable = GameObject.FindGameObjectWithTag("EventSystemInteractable").GetComponent<EventSystem>();
+        if (_eventSystemInteractable == null) _eventSystemInteractable = GameObject.FindGameObjectWithTag("EventSystemInteractable").GetComponent<EventSystem>();
         audioPlayer = GetComponent<AudioSource>();
         audioPlayer.clip = itemScrub[ItemObjectScript.currentObjectInt].itemAudio;
 
@@ -45,18 +42,37 @@ public class InteractableItemController : MonoBehaviour
         itemText.text = itemScrub[ItemObjectScript.currentObjectInt].itemText;
         itemImage.sprite = itemScrub[ItemObjectScript.currentObjectInt].itemImage;
         itemImage.transform.localScale = itemScrub[ItemObjectScript.currentObjectInt].itemSize;
+
+    
         
         itemTimeline = itemScrub[ItemObjectScript.currentObjectInt].timeline;
         itemTimeline = playableDirector.playableAsset;
         StartCoroutine(SceneLoadAndSetActive());
     }
+
+    void Update()
+    {
+        // Check if the current triggered object has walked away state set
+        if (ItemObjectScript.currentTriggeredObject != null)
+        {
+            ItemObjectScript currentObject = ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>();
+            if (currentObject != null)
+            {
+                // Logic for handling walked away state is now managed in the ItemObjectScript
+                // This Update method can be simplified
+            }
+        }
+    }
     
+
     private IEnumerator SceneLoadAndSetActive()
     {
+        if (_eventSystemInteractable == null) _eventSystemInteractable = GameObject.FindGameObjectWithTag("EventSystemInteractable").GetComponent<EventSystem>();
+
         var sceneByName = SceneManager.GetSceneByName("Interactable");
         SceneManager.SetActiveScene(sceneByName);
         yield return new WaitUntil(() => SceneManager.GetActiveScene() == sceneByName);
-        _eventSystemInteractable.enabled = true;
+         _eventSystemInteractable.enabled = true;
         StartCoroutine(PlayerInsideItemScene(sceneByName.name));
         ItemObjectScript.currentlyOpeningItem = false;
         ItemObjectScript.inItemScene = true;
@@ -70,33 +86,45 @@ public class InteractableItemController : MonoBehaviour
             Debug.LogError(nameOfScene + " isn't the active Scene!");
         }
         
-        yield return new WaitUntil(() => clickedYes || clickedNo || UserInput.Escape);
-        if (clickedYes)
+        // Wait for user input and handle it directly on the triggered object
+        yield return new WaitUntil(() => 
+            UserInput.Escape || 
+            (UserInput.Movement.magnitude > 0.1f && 
+                ItemObjectScript.currentTriggeredObject != null && 
+                !ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>().interactableWithChoice));
+        
+        // Handle escape key press
+        if (UserInput.Escape)
         {
-            // yield return new WaitUntil(() => !clickedYes);
             yield return null;
-            StartOnClickYes();
+            if (ItemObjectScript.currentTriggeredObject != null)
+            {
+                ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>().SetWalkedAway();
+            }
+            ExitScene(nameOfScene);
         }
-        else if (clickedNo)
-        {
-            // yield return new WaitUntil(() => !clickedNo);
-            yield return null;
-            StartOnClickNo();
-        }
-        else
+        // Handle walked away case (movement input)
+        else if (UserInput.Movement.magnitude > 0.1f && 
+                ItemObjectScript.currentTriggeredObject != null && 
+                !ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>().interactableWithChoice)
         {
             yield return null;
+            ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>().SetWalkedAway();
             ExitScene(nameOfScene);
         }
     }
 
-    private void ExitScene(string nameOfScene)
+    public void ExitScene(string nameOfScene)
     {
         Debug.Log("Currently exiting " + nameOfScene + ".");
         ItemObjectScript.inItemScene = false;
         _eventSystemInteractable.enabled = false;
-        EventSystemMain.Instance.EnableEventSystem();
+        FloorManager.Instance.eventSystemMain.EnableEventSystem();
         SceneManager.UnloadSceneAsync(nameOfScene);
+
+        
+        FloorManager.Instance.player.GetComponent<PlayerMovement>().permaLockMovement = false;
+        
     }
 
     public void StartOnClickYes()
@@ -106,7 +134,29 @@ public class InteractableItemController : MonoBehaviour
     
     private IEnumerator OnClickYes()
     {
-        clickedYes = true;
+        // Set the flag on the current object instead of using a static variable
+        if (ItemObjectScript.currentTriggeredObject != null)
+        {
+            ItemObjectScript itemScript = ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>();
+            if (itemScript != null)
+            {
+                itemScript.SetClickedYes();
+            }
+        }
+
+        if (itemScrub[ItemObjectScript.currentObjectInt].PublicBoolToChange != null)
+            {
+                if (itemScrub[ItemObjectScript.currentObjectInt].SetBoolToTrue)
+                {
+                    Debug.LogWarning("Floor Manager bool " + itemScrub[ItemObjectScript.currentObjectInt].PublicBoolToChange + " is set to true.");
+                    FloorManager.Instance.SetBool(itemScrub[ItemObjectScript.currentObjectInt].PublicBoolToChange, true);
+                }
+                else
+                {
+                    //Debug.LogWarning("Floor Manager bool " + itemScrub[ItemObjectScript.currentObjectInt].PublicBoolToChange + " is set to false.");
+
+                }
+            }
         if (audioPlayer.clip != null) 
         {
             audioPlayer.clip = itemScrub[ItemObjectScript.currentObjectInt].cutSceneAudio;
@@ -117,12 +167,13 @@ public class InteractableItemController : MonoBehaviour
         {
             playableDirector.Play(itemTimeline);
             yield return new WaitForSeconds((float)itemTimeline.duration + 0.1f);
-            clickedYes = false;
+            // Reset the clickedYes state if needed
         }
+        
         else
         {
             yield return null;
-            clickedYes = false;
+            // No need to reset static clickedYes
         }
         ExitScene(SceneManager.GetActiveScene().name);
     }
@@ -134,10 +185,30 @@ public class InteractableItemController : MonoBehaviour
     
     private IEnumerator OnClickNo()
     {
-        clickedNo = true;
+        // Set the flag on the current object instead of using a static variable
+        if (ItemObjectScript.currentTriggeredObject != null)
+        {
+            ItemObjectScript itemScript = ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>();
+            if (itemScript != null)
+            {
+                itemScript.SetClickedNo();
+            }
+        }
+        
         yield return null; // "yield return null" waits for 1 frame before continuing down.
-        clickedNo = false;
         ExitScene(SceneManager.GetActiveScene().name);
+    }
+
+    // Handle "Yes" button click from UI
+    public void OnYesButtonClick()
+    {
+        StartOnClickYes();
+    }
+    
+    // Handle "No" button click from UI
+    public void OnNoButtonClick()
+    {
+        StartOnClickNo();
     }
 
     private void DirectorPlaying(PlayableDirector obj)

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class ItemBorder2D : MonoBehaviour
 {
-    public float maxOpacity = 1f;
-    public float timeToOccilate = 1f;
-    public float borderPxSize = 2f;
+    private float maxOpacity;
+    private float timeToOccilate;
+    private float borderPxSize;
     public Color borderColor = Color.white;
     
     [Tooltip("Material with outline shader. Create this asset in your project.")]
@@ -16,12 +16,14 @@ public class ItemBorder2D : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Material instanceMaterial;
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float borderActivationDistance = 2f;
+    private float borderActivationDistance = 2f;
     private bool borderActive = false;
+    private Collider2D myCollider;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        myCollider = GetComponent<Collider2D>();
     }
 
     void Start()
@@ -29,13 +31,40 @@ public class ItemBorder2D : MonoBehaviour
         if (playerTransform == null) playerTransform = GameObject.FindWithTag("Player").transform;
         
         StopDisplayingBorder();
+        borderActivationDistance = 0.01f;
+        borderPxSize = 3f;
+        timeToOccilate = 1.5f;
+        maxOpacity = 1f;
     }
 
     void Update()
     {
         if (playerTransform != null)
         {
-            float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+            float distanceToPlayer;
+            
+            if (myCollider != null)
+            {
+                // Get the player's collider
+                Collider2D playerCollider = playerTransform.GetComponent<Collider2D>();
+                
+                if (playerCollider != null)
+                {
+                    // Use the distance between the colliders for more accurate proximity detection
+                    distanceToPlayer = Physics2D.Distance(myCollider, playerCollider).distance;
+                }
+                else
+                {
+                    // Fallback to closest point on collider if player has no collider
+                    Vector2 playerPos = playerTransform.position;
+                    distanceToPlayer = Vector2.Distance(myCollider.ClosestPoint(playerPos), playerPos);
+                }
+            }
+            else
+            {
+                // Fallback to simple transform distance if no collider is available
+                distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+            }
             
             // If player is within range and border is not active, show border
             if (distanceToPlayer <= borderActivationDistance && !borderActive)
@@ -143,10 +172,10 @@ public class ItemBorder2D : MonoBehaviour
     {
         float elapsedTime = 0f;
         
-        while (elapsedTime < timeToOccilate && borderObject != null && instanceMaterial != null)
+        while (elapsedTime < (timeToOccilate / 2) && borderObject != null && instanceMaterial != null)
         {
             elapsedTime += Time.deltaTime;
-            float normalizedTime = elapsedTime / timeToOccilate;
+            float normalizedTime = elapsedTime / (timeToOccilate / 2);
             float currentAlpha = Mathf.Lerp(startingOpacity, 0f, normalizedTime);
             
             // Update the outline color's alpha in the material

@@ -19,3 +19,5 @@ MonoBehaviour:
   itemAudio: {fileID: 8300000, guid: d4bf57ac3dafdb048aac9ec25caac147, type: 3}
   cutSceneAudio: {fileID: 0}
   timeline: {fileID: 11400000, guid: 857252836a5ac6a45893a177971a8d23, type: 2}
+  PublicBoolToChange: GoToNextDay
+  SetBoolToTrue: 1

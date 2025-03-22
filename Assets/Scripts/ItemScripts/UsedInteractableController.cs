@@ -21,6 +21,8 @@ using UnityEngine.UI;
             itemImage.sprite = itemScrub[ItemObjectScript.currentUsedInteractableInt].itemImage;
             itemImage.transform.localScale = itemScrub[ItemObjectScript.currentUsedInteractableInt].itemSize;
             audioPlayer.PlayOneShot(itemScrub[ItemObjectScript.currentUsedInteractableInt].itemAudio);
+        
+
             StartCoroutine(SceneLoadAndSetActive());
         }
 
@@ -41,13 +43,27 @@ using UnityEngine.UI;
             {
                 Debug.LogError(nameOfScene + " isn't the active Scene!");
             }
+            yield return new WaitForSecondsRealtime(1f);
+
             yield return new WaitUntil(() => UserInput.Interact || UserInput.Escape || !ItemController.playerIsInsideItemTrigger);
             
             yield return null; // This line is vital to stop for 1 frame. It avoids reopening a scene immediately if UserInput.Interact.
-            
+            FloorManager.Instance.player.GetComponent<PlayerMovement>().permaLockMovement = false;
+
+            // Reset interaction state when exiting
+            if (ItemObjectScript.currentTriggeredObject != null)
+            {
+                ItemObjectScript itemScript = ItemObjectScript.currentTriggeredObject.GetComponent<ItemObjectScript>();
+                if (itemScript != null)
+                {
+                    itemScript.ResetInteractionState();
+                }
+            }
+
             Debug.Log("Currently exiting " + nameOfScene + ".");
             ItemObjectScript.inItemScene = false;
             SceneManager.UnloadSceneAsync(nameOfScene);
+            
         }
     }
 

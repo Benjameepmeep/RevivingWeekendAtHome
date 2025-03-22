@@ -15,12 +15,12 @@ using UnityEngine;
             _animator = GetComponent<Animator>();
             _audioSource = GetComponent<AudioSource>();
 
-            if (DataTransfer.bedroomDoorOpen)
+            if (FloorManager.Instance.dataTransfer.bedroomDoorOpen)
             {
                 Debug.Log("BedroomDoorIsOpen");
                 _animator.Play("BedroomDoorOpen");
             }
-            else if (!DataTransfer.bedroomDoorOpen)
+            else if (!FloorManager.Instance.dataTransfer.bedroomDoorOpen)
             {
                 Debug.Log("BedroomDoorIsClosed");
                 _animator.Play("BedroomDoorClosed");
@@ -39,7 +39,7 @@ using UnityEngine;
                 return;
             
             // If bedroomDoor is open, close it. If bedroomDoor is closed, open it.
-            switch (DataTransfer.bedroomDoorOpen)
+            switch (FloorManager.Instance.dataTransfer.bedroomDoorOpen)
             {
                 case false:
                     Debug.Log("BedroomDoorIsOpening");
@@ -52,7 +52,7 @@ using UnityEngine;
                     _audioSource.PlayOneShot(bedroomDoorClosing);
                     break;
             }
-            DataTransfer.OpenOrCloseBedroomDoor();
+            FloorManager.Instance.dataTransfer.OpenOrCloseBedroomDoor();
         
             // Reset the timer to be 0.
             slideTimer = -Time.deltaTime;

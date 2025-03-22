@@ -4,6 +4,8 @@ using UnityEngine;
     {
         private UserInput _userInput;
         public Animator anim;
+
+        public bool permaLockMovement;
         [SerializeField] private Rigidbody2D rb; 
                
         [Header("Configurable Parameters")]
@@ -19,10 +21,25 @@ using UnityEngine;
         {
             _userInput = GetComponent<UserInput>();
         }
+        
 
         private void Update()
         {
+            if (permaLockMovement){
+                _directionV2 = Vector2.zero; // Immediately stop movement
+                Animate("Player_Idle");
+                return;
+            }
+                
             if (!_userInput.gameScreenControlsActive) return;
+            
+            // Get raw input values
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float verticalInput = Input.GetAxisRaw("Vertical");
+            
+            _directionV2.x = horizontalInput;
+            _directionV2.y = verticalInput;
+            
             
             // Animation direction
             if (_directionV2.y > Mathf.Sqrt(0.5f))
@@ -43,13 +60,9 @@ using UnityEngine;
             }
 
             Animate(_directionV2 == Vector2.zero ? "Player_Idle" : "Player_Walk");
-
-            // TODO: Configure PlayerMovement to be connected to the actual UserInput, instead of the current manual solution.
-            
-            _directionV2.x = Input.GetAxisRaw("Horizontal");
-            _directionV2.y = Input.GetAxisRaw("Vertical");
         }
         
+            
         private void Animate(string unitAnimation)
         {
             anim.Play(unitAnimation + _direction);
@@ -57,7 +70,22 @@ using UnityEngine;
 
         private void FixedUpdate()
         {
-            if (!DataTransfer.playerCanMove) return;
+            if (permaLockMovement) return;
+            if (FloorManager.Instance == null) return;
+            if (!FloorManager.Instance.dataTransfer.playerCanMove) return;
+
+#if UNITY_EDITOR
+
+
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                moveSpeed = 5.5f;
+            }
+            else
+            {
+                moveSpeed = 2.25f;
+            }
+#endif
             rb.MovePosition(rb.position + _directionV2.normalized * (moveSpeed * Time.fixedDeltaTime));
         }
 
@@ -65,6 +93,6 @@ using UnityEngine;
         {
             if (!other.CompareTag("BottomFloor") && !other.CompareTag("CatPNG") &&
                 !other.CompareTag("TopFloor")) return;
-            Debug.Log("Currently inside Trigger of: " + other.gameObject.name);
+            //Debug.Log("Currently inside Trigger of: " + other.gameObject.name);
         }
     }
