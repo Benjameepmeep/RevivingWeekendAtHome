@@ -7,6 +7,9 @@ public class ClickAnywhereHandler : MonoBehaviour
 
     [SerializeField] private GameObject playButton, quitButton;
     [SerializeField] private GameObject pressAnywhereObjects;
+    
+    // Flag to track if the buttons have already been shown
+    private bool _buttonsShown = false;
 
     // private void Update()
     // {
@@ -16,14 +19,30 @@ public class ClickAnywhereHandler : MonoBehaviour
     //     }
     // }
 
-
+    private void OnDestroy()
+    {
+        // Clear the static instance when destroyed
+        if (_instance == this)
+            _instance = null;
+    }
 
     public void ShowPlayButtons()
     {
-        playButton.SetActive(true);
-        quitButton.SetActive(true);
-        pressAnywhereObjects.SetActive(false);
-    
+        // Prevent multiple calls or calls after destruction
+        if (_buttonsShown) 
+            return;
+            
+        // Check if the references are still valid before using them
+        if (playButton != null)
+            playButton.SetActive(true);
+            
+        if (quitButton != null)
+            quitButton.SetActive(true);
+            
+        if (pressAnywhereObjects != null)
+            pressAnywhereObjects.SetActive(false);
+        
+        _buttonsShown = true;
         Destroy(gameObject);
     }
 }

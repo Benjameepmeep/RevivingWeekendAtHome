@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public class PauseManager : MonoBehaviour
 
     private void Update()
     {
+        if (SceneManager.GetActiveScene().name == "AScene 0 - Title Screen") return;
+
+        
         if (userInput == null)
         {
             CheckForPlayer();

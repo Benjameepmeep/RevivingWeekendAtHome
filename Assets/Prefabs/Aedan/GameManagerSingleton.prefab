@@ -1415,6 +1415,9 @@ MonoBehaviour:
   catIsDead: 0
   catOutside: 0
   CatBowlFull: 0
+  playerDied: 0
+  numberOfTimesOpenedDoorOrCatFlap: 0
+  outcome: 0
   isPause: 0
   playerSortingOrder: 50
   catSortingOrderInside: 50
@@ -2199,6 +2202,7 @@ MonoBehaviour:
   PauseManager: {fileID: 7255776815508161464}
   dataTransfer: {fileID: 6045841807525590165}
   eventSystemMain: {fileID: 523626447035250662}
+  evaluatingOutcome: 0
 --- !u!1 &7375495854352955439
 GameObject:
   m_ObjectHideFlags: 0
