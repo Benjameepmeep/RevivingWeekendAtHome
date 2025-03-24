@@ -16,5 +16,8 @@ MonoBehaviour:
   itemText: I've always loved my family.
   itemImage: {fileID: 21300000, guid: 7f0ea11a33958814395ac8fe4dae32fa, type: 3}
   itemSize: {x: 6.132, y: 3.5}
-  itemAudio: {fileID: 8300000, guid: aede053730a682241bdfaf21171920d2, type: 3}
+  itemAudio: {fileID: 8300000, guid: c9275cbdd0dbca24d8729496a3582a84, type: 3}
   cutSceneAudio: {fileID: 0}
+  timeline: {fileID: 0}
+  PublicBoolToChange: 
+  SetBoolToTrue: 0
