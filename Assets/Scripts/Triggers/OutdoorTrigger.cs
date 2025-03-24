@@ -17,25 +17,16 @@ using UnityEngine.Rendering.Universal;
         [SerializeField] private float transparencyValue, moveAmount, playerOutdoorLightValue;
         private float _playerLightIntensity;
         [SerializeField] private bool startOutdoors;
+
+        private bool addedTheFurniture;
         
         void Start()
         {
             // Fetch all of the objects with the Outdoor and OutdoorToDespawn tags and store them in a list
             // and hide all of the outdoor objects.
             
-            bottomFloor = GameObject.FindGameObjectsWithTag("BottomFloor");
+            AddTheFurniture();
 
-            kitchenWithDoorAndLamp = new GameObject[]
-            {
-                GameObject.Find("WallShelfKitchen"),
-                GameObject.Find("Oven"),
-                GameObject.Find("KitchenCounterTop"),
-                GameObject.Find("RightSideKitchenCounter"),
-                GameObject.Find("Fridge"),
-                GameObject.Find("CatFlap"),
-                GameObject.Find("Lamp"),
-                GameObject.Find("Glass Door + Trigger")
-            };
             
             player = GameObject.FindWithTag("Player");
 
@@ -44,6 +35,39 @@ using UnityEngine.Rendering.Universal;
             playerSortingGroup = player.GetComponent<SortingGroup>();
             
             Check();
+        }
+
+
+        void Update()
+        {
+            if (!addedTheFurniture)
+            {
+                if (FloorManager.Instance.dataTransfer.onTopFloor){
+                    addedTheFurniture = true;
+                    
+                    Invoke(nameof(AddTheFurniture), 0.5f);
+                }
+            }
+        }
+
+        private void AddTheFurniture(){
+
+            bottomFloor = GameObject.FindGameObjectsWithTag("BottomFloor");
+
+                        kitchenWithDoorAndLamp = new GameObject[]
+                        {
+                            GameObject.Find("WallShelfKitchen"),
+                            GameObject.Find("Oven"),
+                            GameObject.Find("KitchenCounterTop"),
+                            GameObject.Find("RightSideKitchenCounter"),
+                            GameObject.Find("Fridge"),
+                            GameObject.Find("CatFlap"),
+                            GameObject.Find("Lamp"),
+                            GameObject.Find("Glass Door + Trigger")
+            };
+
+            
+            
         }
 
         private void Check(){
@@ -66,6 +90,16 @@ using UnityEngine.Rendering.Universal;
             {
                 PlayerStartsOutside(false);
             }
+
+            if (FloorManager.Instance.dataTransfer.onTopFloor)
+            {
+                addedTheFurniture = false;
+            }
+            else
+            {
+                addedTheFurniture = true;
+            }
+            
         }
         
         public void PlayerStartsOutside(bool startsOutside)
@@ -84,6 +118,8 @@ using UnityEngine.Rendering.Universal;
 
         private void PlayerIndoors()
         {
+            //if (FloorManager.Instance.dataTransfer.onTopFloor) return;
+
             foreach (GameObject bottomFloorGameObject in bottomFloor)
             {
                 bottomFloorGameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
