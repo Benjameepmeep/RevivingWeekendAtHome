@@ -67,6 +67,10 @@ using Random = UnityEngine.Random;
                 catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.catSortingOrderInside;
                 // Debug.Log("Cat Is Inside");
             }
+
+            if (FloorManager.Instance.dataTransfer.onTopFloor){
+                FloorManager.Instance.DisableCatVisuals();
+            }
         }
 
         private void Update()
@@ -74,15 +78,12 @@ using Random = UnityEngine.Random;
             if (FloorManager.Instance == null) return;
             // TODO: Fix bug that happens when player is outside and walks inside, causing the cat to appear above the inside walls if outside as well.
 
+
             if (FloorManager.Instance.dataTransfer.catOutside)
             {
                 catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.CatSortingOrderOutside;
             }
-            else if (FloorManager.Instance.dataTransfer.catOutside && FloorManager.Instance.dataTransfer.playerInside)
-            {
-                catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.CatSortingOrderOutside;
-            }
-            else if (!FloorManager.Instance.dataTransfer.catOutside)
+            else
             {
                 catSortingGroup.sortingOrder = FloorManager.Instance.dataTransfer.catSortingOrderInside;
             }

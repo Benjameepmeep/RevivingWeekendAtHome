@@ -100,8 +100,8 @@ public class FloorManager : MonoBehaviour
         if (!dataTransfer.catIsDead)
         {
             int layerDefault = LayerMask.NameToLayer("Default");
-            cat.layer = layerDefault;
-            catSprite.enabled = true;
+            if (cat != null) cat.layer = layerDefault;
+            if (catSprite != null)catSprite.enabled = true;
 
         }
     }
@@ -111,8 +111,8 @@ public class FloorManager : MonoBehaviour
         if (!dataTransfer.catIsDead)
         {
             int layerCat = LayerMask.NameToLayer("Cat");
-            cat.layer = layerCat;
-            catSprite.enabled = false;
+            if (cat != null) cat.layer = layerCat;
+            if (catSprite != null) catSprite.enabled = false;
         }
     }
 
@@ -122,7 +122,7 @@ public class FloorManager : MonoBehaviour
         if (catTriggerBox) catTriggerBox.enabled = true;
 
 
-        if (catSprite) catSprite.enabled = true;
+        if (catSprite && !dataTransfer.catIsDead) catSprite.enabled = true;
         
         if (pauseScreen) pauseScreen.SetActive(true);
         
@@ -132,7 +132,7 @@ public class FloorManager : MonoBehaviour
     {
         if (pauseScreen != null) pauseScreen.SetActive(false);
         if (catTriggerBox != null) catTriggerBox.enabled = true;
-        if (catSprite != null) catSprite.enabled = true;
+        if (catSprite != null && !dataTransfer.catIsDead) catSprite.enabled = true;
         int layerDefault = LayerMask.NameToLayer("Default"); // Sets the cat layer to Default
         if (cat != null) cat.layer = layerDefault;
         // Debug.Log("Current cat layer: Default");

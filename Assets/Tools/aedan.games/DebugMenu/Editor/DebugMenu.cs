@@ -432,15 +432,27 @@ public class DebugMenu : EditorWindow
         }
         if (sceneList == null)
         {
-            //Debug.LogError("Current scene is not in any defined scene list.");
-
-            EditorSceneManager.OpenScene(aedanScenes[0]);
+            Debug.LogError("Current scene is not in any defined scene list.");
             return;
         }
+
         int totalScenes = sceneList.Length;
         // Calculate next or previous index using modulo arithmetic
         int targetIndex = next ? (index + 1) % totalScenes : (index + totalScenes - 1) % totalScenes;
-        EditorSceneManager.OpenScene(sceneList[targetIndex]);
+
+        string targetScenePath = sceneList[targetIndex];
+        string targetSceneName = System.IO.Path.GetFileNameWithoutExtension(targetScenePath);
+
+        if (EditorApplication.isPlaying)
+        {
+            // Use SceneManager to load the scene during play mode
+            UnityEngine.SceneManagement.SceneManager.LoadScene(targetSceneName);
+        }
+        else
+        {
+            // Use EditorSceneManager to load the scene in the editor
+            EditorSceneManager.OpenScene(targetScenePath);
+        }
     }
     
     private void SkipToEndOfTimeline()
